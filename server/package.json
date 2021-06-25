@@ -11,7 +11,8 @@
     "license": "ISC",
     "dependencies": {
         "@types/express": "^4.17.12",
-        "express": "^4.17.1"
+        "express": "^4.17.1",
+        "mongodb": "^3.6.9"
     },
     "devDependencies": {
         "typescript": "^4.3.4"
