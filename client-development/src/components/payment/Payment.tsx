@@ -12,6 +12,7 @@ interface Props {
         name : string,
         amount: number,
         rythm: string,
+        organization: string,
         payDay?: Date,
         payDays?: Date[],
     }

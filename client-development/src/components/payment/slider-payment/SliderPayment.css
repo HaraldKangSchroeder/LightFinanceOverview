@@ -1,0 +1,30 @@
+.currency-header{
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.currency {
+    color:rgb(80,80,80);
+    width:210px;
+    text-align: center;
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.money-transfer {
+    padding: 5px;
+}
+
+.money-transfer-minus {
+    color : red;
+}
+
+.money-transfer-plus {
+    color : green;
+}
+
+@media all and (max-width : 600px) {
+    .currency-header{
+        font-size: 1em;
+    }   
+}

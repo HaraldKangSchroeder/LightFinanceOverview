@@ -2,10 +2,12 @@ import React from 'react';
 import Payment from '../payment/Payment';
 import Grid from '@material-ui/core/Grid';
 import "./App.css";
+import SliderPayment from '../payment/slider-payment/SliderPayment';
 
 let test = {
     name: "testname",
     amount: 10,
+    organization: "DEVK",
     rythm: "monthly",
     payDay: new Date(),
 }
@@ -13,6 +15,7 @@ let test = {
 let testArr = {
     name: "testname",
     amount: 10,
+    organization: "DEVK",
     rythm: "monthly",
     payDays: [new Date(), new Date()],
 }
@@ -46,6 +49,10 @@ function App() {
                     <Payment payment={test} />
                     <Payment payment={test} />
                     <Payment payment={testArr} />
+                </div>
+                <div className="subheader">Monthly Overview</div>
+                <div className="slider-container" style={{height:"550px"}}>
+                    <SliderPayment />
                 </div>
             </Grid>
             <Grid item xs={1} md={3} />

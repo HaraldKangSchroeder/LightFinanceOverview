@@ -4,6 +4,7 @@ interface Props {
     payment: {
         amount: number,
         rythm: string,
+        organization: string,
         payDay?: Date,
         payDays?: Date[],
     }
@@ -18,6 +19,9 @@ export default function PaymentData(props: Props) {
         <div className="payment-data">
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Amount</div> {props.payment.amount}
+            </div>
+            <div className="payment-data-element">
+                <div className="payment-data-element-descriptor">Organziation</div> {props.payment.organization}
             </div>
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Rythm</div> {props.payment.rythm}
