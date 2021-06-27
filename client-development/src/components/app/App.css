@@ -1,0 +1,42 @@
+* {
+    font-family: "Calibri", sans-serif;
+}
+
+.header {
+    color : rgb(80,80,80);
+    font-size: 2em;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.subheader {
+    color : rgb(80,80,80);
+    font-size: 1.7em;
+    margin-top:20px;
+    padding-top:20px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.payments-container {
+    border-top-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-width: 1px;
+    border-color: rgba(200,200,200,0.5);
+    background : white;
+}
+
+body {
+    background : rgb(250,230,230)
+}
+
+@media all and (max-width : 600px ) {
+    .header {
+        font-size: 1.6em;
+    }
+
+    .subheader {
+        font-size: 1.3em;
+    }
+}
