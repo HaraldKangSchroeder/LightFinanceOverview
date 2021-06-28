@@ -2,7 +2,7 @@
     /* background : red */
     /* border-bottom-style: solid; */
     border-width: 1px;
-    border-color: rgba(200,200,200,0.5);
+    border-color: rgba(200, 200, 200, 0.5);
 }
 
 .payment-preview {
@@ -10,42 +10,53 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top : 15px;
-    padding-bottom : 15px;
-    padding-left: 10px;
-    padding-right:10px;
-    color:rgb(80,80,80);
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: rgb(80, 80, 80);
     font-size: 1.2em;
 }
 
+.payment-preview:hover {
+    background: rgb(247, 247, 247);
+    cursor: pointer;
+}
+
 .expand {
-    /* transform: scale(1.5); */
-    height:20px;
-    width:20px;
+    height: 15px;
+    width: 15px;
     background-position: center;
     background-size: cover;
     background-image: url('expandIcon.png');
 }
 
 .color-indicator {
-    width:30px;
-    height:30px;
+    width: 30px;
+    height: 30px;
     border-radius: 10px;
-    background : yellow;
+    background: yellow;
 }
 
 .payment-preview-left {
     /* background:red; */
-    display:flex;
-    align-items:center;
+    display: flex;
+    align-items: center;
 }
 
 .payment-name {
     margin-left: 20px;
 }
 
-@media all and (max-width : 600px ) {
+@media all and (max-width: 600px) {
     .payment-preview {
         font-size: 1.05em;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .expand {
+        height: 10px;
+        width: 10px;
     }
 }

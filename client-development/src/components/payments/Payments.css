@@ -1,0 +1,6 @@
+.payments-container {
+    border-top-style: solid;
+    border-width: 1px;
+    border-color: rgba(200,200,200,0.5);
+    background : white;
+}

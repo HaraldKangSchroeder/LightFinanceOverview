@@ -1,0 +1,38 @@
+.payment-data-element {
+    /* background : blue; */
+    padding-top : 10px;
+    padding-bottom : 10px;
+    padding-left: 100px;
+    padding-right:50px;
+    /* border-bottom-style: solid; */
+    border-width: 1px;
+    border-color: rgba(200,200,200,0.5);
+    display: flex;
+    color : rgb(80,80,80);
+}
+
+.payment-data-element-descriptor {
+    min-width:120px;
+}
+
+.payment-data-buttons-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 100px;
+    display: flex;
+}
+
+.payment-button {
+    margin-right:20px;
+}
+
+@media all and (max-width : 600px) {
+    .payment-data-element {
+        padding-left: 60px;
+    }
+    .payment-data-buttons-container {
+        padding-left: 60px;
+        font-size: small;
+    }
+}
+

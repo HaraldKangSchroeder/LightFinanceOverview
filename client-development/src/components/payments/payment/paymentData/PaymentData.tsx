@@ -1,3 +1,5 @@
+import DeletePaymentButton from "./DeletePaymentButton";
+import EditPaymentDataButton from "./EditPaymentDataButton";
 import "./PaymentData.css";
 
 interface Props {
@@ -16,7 +18,7 @@ interface Props {
 export default function PaymentData(props: Props) {
     var a = 5;
     return (
-        <div className="payment-data">
+        <div>
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Amount</div> {props.payment.amount}
             </div>
@@ -27,15 +29,18 @@ export default function PaymentData(props: Props) {
                 <div className="payment-data-element-descriptor">Rythm</div> {props.payment.rythm}
             </div>
             {props.payment.payDay ?
-                <div className="payment-data-element" style={{ borderBottomStyle: "solid" }}>
+                <div className="payment-data-element">
                     <div className="payment-data-element-descriptor">Day</div> {props.payment.payDay.getDay()}
                 </div>
                 :
-                <div className="payment-data-element" style={{ borderBottomStyle: "solid"}}> 
+                <div className="payment-data-element"> 
                     <div className="payment-data-element-descriptor">Days</div> <div>wa wa wa wa wa wawa wa wawa wa wawa wa wawa wa wawwa wa wa wa wa wawa wa wawa wa wawa wa wawa wa wawwa wa wa wa wa wawa wa wawa wa wawa wa wawa wa wawwa wa wa wa wa wawa wa wawa wa wawa wa wawa wa wawwa wa wa wa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wawa wa wa</div>
                 </div>
             }
-
+            <div className="payment-data-buttons-container">
+                <EditPaymentDataButton />
+                <DeletePaymentButton />
+            </div>
         </div>
     )
 }
