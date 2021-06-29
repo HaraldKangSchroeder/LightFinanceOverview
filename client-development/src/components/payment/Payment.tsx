@@ -5,17 +5,11 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { useState } from "react";
-import PaymentData from "./paymentData/PaymentData";
+import PaymentData from "../payment-data/PaymentData";
+import PaymentClass from "../../classes/Payment";
 
 interface Props {
-    payment: {
-        name : string,
-        amount: number,
-        rythm: string,
-        organization: string,
-        payDay?: Date,
-        payDays?: Date[],
-    }
+    payment: PaymentClass
 }
 
 export default function Payment(props : Props) {

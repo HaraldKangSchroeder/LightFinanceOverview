@@ -1,20 +1,96 @@
 import DateFnsUtils from "@date-io/date-fns"
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, Select, MenuItem, DialogActions, Button } from "@material-ui/core"
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import EditIcon from '@material-ui/icons/Edit';
+import Payment from "../../classes/Payment";
+import axios from "axios";
+import "./ButtonsPayment.css"
+import { PaymentsContext } from "../../contexts/PaymentsContext";
+import {isButtonStateSubmitAble} from "./Utils";
+import { PaymentInterface } from "../../interfaces/global";
 
+interface Props {
+    payment: Payment
+}
 
-export default function EditPaymentDataButton() {
-    const [open,setOpen] = useState(false);
+export default function EditPaymentDataButton({ payment }: Props) {
+    const [open, setOpen] = useState(false);
+    const [state, setState] = useState<PaymentInterface>({
+        name: payment.getName(),
+        organization: payment.getOrganization(),
+        amount: payment.getAmount(),
+        selectedDate: payment.getSelectedDate(),
+        rythm: payment.getRythm(),
+    });
+    const [originalName, setOriginalName] = useState(payment.getName());
+    const {updatePayments} = useContext(PaymentsContext);
+
+    const handleOpen = () => {
+        setState({
+            name: payment.getName(),
+            organization: payment.getOrganization(),
+            amount: payment.getAmount(),
+            selectedDate: payment.getSelectedDate(),
+            rythm: payment.getRythm(),
+        });
+        setOriginalName(payment.getName());
+        setOpen(true);
+    }
+
+    const handleEdit = async () => {
+        try{
+            let paymentsUnformatted = await axios.post("/edit", {originalName: originalName, editedPayment:state});
+            updatePayments(paymentsUnformatted);
+        }
+        catch(e){
+            console.log(e);
+        }
+        handleClose();
+    }
 
     const handleClose = () => {
         setOpen(false);
     }
 
+    const handleChangeAmount = (e : any) => {
+        setState({
+            ...state,
+            amount : parseInt(e.target.value)
+        });
+    }
+
+    const handleChangeName = (e : any) => {
+        setState({
+            ...state,
+            name : e.target.value
+        });
+    }
+
+    const handleChangeOrganization = (e : any) => {
+        setState({
+            ...state,
+            organization : e.target.value
+        });
+    }
+
+    const handleChangeRythm = (e : any) => {
+        setState({
+            ...state,
+            rythm : e.target.value
+        });
+    }
+
+    const handleChangeSelectedDate = (e : any) => {
+        setState({
+            ...state,
+            selectedDate : e
+        });
+    }
+
     return (
         <div>
-            <div className="default-button payment-button" onClick={() => { setOpen(true) }}>
+            <div className="default-payment-button specific-payment-button" onClick={handleOpen}>
                 <EditIcon />
             </div>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -28,7 +104,9 @@ export default function EditPaymentDataButton() {
                         id="name"
                         label={`Name`}
                         type="text"
+                        value={state.name}
                         fullWidth
+                        onChange={handleChangeName}
                     />
                     <div className={"dialog-margin"}>
                         <DialogContentText>
@@ -40,6 +118,8 @@ export default function EditPaymentDataButton() {
                         id="name"
                         label="Organization name"
                         type="text"
+                        value={state.organization}
+                        onChange={handleChangeOrganization}
                         fullWidth
                     />
                     <div className={"dialog-margin"}>
@@ -51,8 +131,10 @@ export default function EditPaymentDataButton() {
                         autoFocus
                         id="name"
                         label="Amount in Euros"
-                        type="text"
+                        type="number"
+                        value={state.amount}
                         fullWidth
+                        onChange={handleChangeAmount}
                     />
                     <div className={"dialog-margin"}>
                         <DialogContentText>
@@ -67,8 +149,8 @@ export default function EditPaymentDataButton() {
                             id="date-picker-dialog"
                             label="Date picker dialog"
                             format="MM/dd/yyyy"
-                            value={new Date()}
-                            onChange={() => { }}
+                            value={state.selectedDate}
+                            onChange={handleChangeSelectedDate}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
                             }}
@@ -82,13 +164,16 @@ export default function EditPaymentDataButton() {
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={10}
+                        value={state.rythm}
                         style={{ width: "100%" }}
-                        onChange={() => { }}
+                        onChange={handleChangeRythm}
                     >
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        <MenuItem value={"one-month"}>one-month</MenuItem>
+                        <MenuItem value={"two-month"}>two-month</MenuItem>
+                        <MenuItem value={"three-month"}>three-month</MenuItem>
+                        <MenuItem value={"four-month"}>four-month</MenuItem>
+                        <MenuItem value={"half-year"}>half-year</MenuItem>
+                        <MenuItem value={"year"}>year</MenuItem>
                     </Select>
                 </DialogContent>
 
@@ -96,8 +181,8 @@ export default function EditPaymentDataButton() {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Add
+                    <Button onClick={handleEdit} color="primary" disabled={!isButtonStateSubmitAble(state)}>
+                        Edit
                     </Button>
                 </DialogActions>
             </Dialog>

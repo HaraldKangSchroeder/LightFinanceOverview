@@ -1,0 +1,22 @@
+.specific-payment-button {
+    margin-right:20px;
+}
+
+.default-payment-button {
+    background: rgb(245,245,245);
+    border-radius: 3px;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color:rgb(80,80,80);
+    font-size: 1em;
+}
+
+.default-payment-button:hover {
+    background: rgb(235,235,235);
+    cursor: pointer;
+}
