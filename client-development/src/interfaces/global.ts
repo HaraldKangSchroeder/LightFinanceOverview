@@ -1,15 +1,10 @@
-import { Rythm } from "../enums/enums";
+import { Month, Rythm } from "../enums/enums";
 
 export interface PaymentInterface {
     name : string;
     organization : string;
     amount : number;
-    selectedDate : PayDate;
+    selectedMonth : Month;
     rythm : Rythm;
     type? : string; 
-}
-
-export interface PayDate {
-    date : number,
-    month : number,
 }

@@ -25,8 +25,8 @@ export default function PaymentData(props: Props) {
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Days</div>
                 <div style={{ display: "flex", flexWrap: "wrap" }}>
-                    {props.payment.getPayDates().map(payDate =>
-                        <DateView day={payDate.date} month={payDate.month} />
+                    {props.payment.getPayMonths().map(month =>
+                        <DateView month={month} />
                     )}
                 </div>
             </div>
@@ -39,14 +39,13 @@ export default function PaymentData(props: Props) {
 }
 
 interface PropsDateView {
-    day : number,
     month : number
 }
 
-function DateView(props : PropsDateView) {
+function DateView({month} : PropsDateView) {
     return (
         <div className="date-view">
-            {props.day} {getMonthNameById(props.month)}
+            {getMonthNameById(month)}
         </div>
     )
 }

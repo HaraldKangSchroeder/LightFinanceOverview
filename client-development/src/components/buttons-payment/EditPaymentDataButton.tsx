@@ -7,9 +7,9 @@ import Payment from "../../classes/Payment";
 import axios from "axios";
 import "./ButtonsPayment.css"
 import { PaymentsContext } from "../../contexts/PaymentsContext";
-import {getDateByPayDate, isButtonStateSubmitAble} from "./Utils";
+import { isButtonStateSubmitAble } from "./Utils";
 import { PaymentInterface } from "../../interfaces/global";
-import { Rythm } from "../../enums/enums";
+import { Month, Rythm } from "../../enums/enums";
 
 interface Props {
     payment: Payment
@@ -21,18 +21,18 @@ export default function EditPaymentDataButton({ payment }: Props) {
         name: payment.getName(),
         organization: payment.getOrganization(),
         amount: payment.getAmount(),
-        selectedDate: payment.getSelectedDate(),
+        selectedMonth: payment.getSelectedMonth(),
         rythm: payment.getRythm(),
     });
     const [originalName, setOriginalName] = useState(payment.getName());
-    const {updatePayments} = useContext(PaymentsContext);
+    const { updatePayments } = useContext(PaymentsContext);
 
     const handleOpen = () => {
         setState({
             name: payment.getName(),
             organization: payment.getOrganization(),
             amount: payment.getAmount(),
-            selectedDate: payment.getSelectedDate(),
+            selectedMonth: payment.getSelectedMonth(),
             rythm: payment.getRythm(),
         });
         setOriginalName(payment.getName());
@@ -40,11 +40,11 @@ export default function EditPaymentDataButton({ payment }: Props) {
     }
 
     const handleEdit = async () => {
-        try{
-            let {data} = await axios.post("/update", {originalName: originalName, editedPayment:{...state, type: payment.getType()}});
+        try {
+            let { data } = await axios.post("/update", { originalName: originalName, editedPayment: { ...state, type: payment.getType() } });
             updatePayments(data);
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
         handleClose();
@@ -54,45 +54,38 @@ export default function EditPaymentDataButton({ payment }: Props) {
         setOpen(false);
     }
 
-    const handleChangeAmount = (e : any) => {
+    const handleChangeAmount = (e: any) => {
         setState({
             ...state,
-            amount : parseInt(e.target.value)
+            amount: parseInt(e.target.value)
         });
     }
 
-    const handleChangeName = (e : any) => {
+    const handleChangeName = (e: any) => {
         setState({
             ...state,
-            name : e.target.value
+            name: e.target.value
         });
     }
 
-    const handleChangeOrganization = (e : any) => {
+    const handleChangeOrganization = (e: any) => {
         setState({
             ...state,
-            organization : e.target.value
+            organization: e.target.value
         });
     }
 
-    const handleChangeRythm = (e : any) => {
+    const handleChangeRythm = (e: any) => {
         setState({
             ...state,
-            rythm : e.target.value
+            rythm: e.target.value
         });
     }
 
-    const handleChangeSelectedDate = (e: Date) => {
-        if(e == null || (isNaN(e.getDay()) || isNaN(e.getMonth()) || isNaN(e.getFullYear()))){
-            setState({
-                ...state,
-                selectedDate: null
-            });
-            return;
-        }
+    const handleChangeSelectedMonth = (e: any) => {
         setState({
             ...state,
-            selectedDate: {date : e.getDate(), month : e.getMonth()}
+            selectedMonth: e.target.value
         });
     }
 
@@ -146,24 +139,29 @@ export default function EditPaymentDataButton({ payment }: Props) {
                     />
                     <div className={"dialog-margin"}>
                         <DialogContentText>
-                            Select new date of the current year. In case of having a rythm different to yearly, it will add the other dates
-                            within the year respectively.
+                            Change the month. In case of having a rythm different to yearly, it will add the other months respectively.
                         </DialogContentText>
                     </div>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            style={{ width: "100%" }}
-                            margin="normal"
-                            id="date-picker-dialog"
-                            label="Date picker dialog"
-                            format="dd/MM/yyyy"
-                            value={getDateByPayDate(state.selectedDate)}
-                            onChange={handleChangeSelectedDate}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                        />
-                    </MuiPickersUtilsProvider>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={state.selectedMonth}
+                        style={{ width: "100%" }}
+                        onChange={handleChangeSelectedMonth}
+                    >
+                        <MenuItem value={Month.JAN}>January</MenuItem>
+                        <MenuItem value={Month.FEB}>February</MenuItem>
+                        <MenuItem value={Month.MAR}>March</MenuItem>
+                        <MenuItem value={Month.APR}>April</MenuItem>
+                        <MenuItem value={Month.MAI}>Mai</MenuItem>
+                        <MenuItem value={Month.JUN}>June</MenuItem>
+                        <MenuItem value={Month.JUL}>July</MenuItem>
+                        <MenuItem value={Month.AUG}>August</MenuItem>
+                        <MenuItem value={Month.SEP}>September</MenuItem>
+                        <MenuItem value={Month.OCT}>October</MenuItem>
+                        <MenuItem value={Month.NOV}>November</MenuItem>
+                        <MenuItem value={Month.DEC}>December</MenuItem>
+                    </Select>
                     <div className={"dialog-margin"}>
                         <DialogContentText>
                             Select new the rythm

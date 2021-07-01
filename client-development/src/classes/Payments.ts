@@ -24,7 +24,7 @@ export default class Payments {
                 paymentUnformatted.name,
                 paymentUnformatted.organization,
                 paymentUnformatted.amount,
-                paymentUnformatted.selectedDate,
+                paymentUnformatted.selectedMonth,
                 paymentUnformatted.rythm,
                 paymentUnformatted.type,
             );
