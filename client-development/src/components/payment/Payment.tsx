@@ -23,7 +23,7 @@ export default function Payment(props : Props) {
             <div className="payment-preview" onClick={handleClick}>
                 <div className="payment-preview-left">
                     <div className="color-indicator"></div>
-                    <div className="payment-name">Haftversicherung</div>
+                    <div className="payment-name">{props.payment.getName()}</div>
                 </div>
                 <div className="expand" style={open ? {transform : "rotate(180deg)"} : {}} />
             </div>

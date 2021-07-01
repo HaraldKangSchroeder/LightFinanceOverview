@@ -6,30 +6,35 @@ import AddIcon from '@material-ui/icons/Add';
 import "./ButtonsPayment.css"
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import axios from "axios";
-import {isButtonStateSubmitAble} from "./Utils";
+import { getDateByPayDate, isButtonStateSubmitAble } from "./Utils";
 import { PaymentInterface } from "../../interfaces/global";
+import { Rythm } from "../../enums/enums";
 
 interface Props {
     type: string
 }
 
-export default function AddPaymentButton(props : Props) {
+export default function AddPaymentButton(props: Props) {
     const [open, setOpen] = useState(false);
     const [state, setState] = useState<PaymentInterface>({
         name: "",
         organization: "",
         amount: 0,
-        selectedDate: new Date(),
-        rythm: "half-year",
+        selectedDate: {date : (new Date()).getDate(), month : (new Date()).getMonth()},
+        rythm: Rythm.HALF_YEAR,
     });
-    const {updatePayments} = useContext(PaymentsContext);
+    const { updatePayments } = useContext(PaymentsContext);
 
     const handleAdd = async () => {
-        try{
-            let paymentsUnformatted = await axios.post("/add", state);
-            updatePayments(paymentsUnformatted);
+        try {
+            let {data} = await axios.post("/create", {
+                ...state,
+                type: props.type,
+            });
+            // console.log(paymentsUnformatted);
+            updatePayments(data);
         }
-        catch(e){
+        catch (e) {
             console.log(e);
         }
         handleClose();
@@ -40,8 +45,8 @@ export default function AddPaymentButton(props : Props) {
             name: "",
             organization: "",
             amount: 0,
-            selectedDate: new Date(),
-            rythm: "half-year",
+            selectedDate: {date : (new Date()).getDate(), month : (new Date()).getMonth()},
+            rythm: Rythm.HALF_YEAR,
         });
         setOpen(true);
     }
@@ -50,41 +55,48 @@ export default function AddPaymentButton(props : Props) {
         setOpen(false);
     }
 
-    const handleChangeAmount = (e : any) => {
+    const handleChangeAmount = (e: any) => {
         setState({
             ...state,
-            amount : parseInt(e.target.value)
+            amount: parseInt(e.target.value)
         });
     }
 
-    const handleChangeName = (e : any) => {
+    const handleChangeName = (e: any) => {
         setState({
             ...state,
-            name : e.target.value
+            name: e.target.value
         });
     }
 
-    const handleChangeSelectedDate = (e : any) => {
+    const handleChangeSelectedDate = (e: Date) => {
+        if(e == null || (isNaN(e.getDay()) || isNaN(e.getMonth()) || isNaN(e.getFullYear()))){
+            setState({
+                ...state,
+                selectedDate: null
+            });
+            return;
+        }
         setState({
             ...state,
-            selectedDate : e
+            selectedDate: {date : e.getDate(), month : e.getMonth()}
         });
     }
 
-    const handleChangeOrganization = (e : any) => {
+    const handleChangeOrganization = (e: any) => {
         setState({
             ...state,
-            organization : e.target.value
+            organization: e.target.value
         });
     }
 
-    const handleChangeRythm = (e : any) => {
+    const handleChangeRythm = (e: any) => {
         setState({
             ...state,
-            rythm : e.target.value
+            rythm: e.target.value
         });
     }
-    
+
     return (
         <React.Fragment>
             <div className="default-payment-button" onClick={handleOpen}>
@@ -132,18 +144,18 @@ export default function AddPaymentButton(props : Props) {
                     />
                     <div className={"dialog-margin"}>
                         <DialogContentText>
-                            Select one date on which the {props.type} occurs. In case of having a rythm different to yearly, it will add the other dates
+                            Select one date of the current year on which the {props.type} occurs. In case of having a rythm different to yearly, it will add the other dates
                             within the year respectively.
                         </DialogContentText>
                     </div>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
-                            style={{ width: "100%" }}
+                            fullWidth
                             margin="normal"
                             id="date-picker-dialog"
                             label="Date picker dialog"
-                            format="MM/dd/yyyy"
-                            value={state.selectedDate}
+                            format="dd/MM/yyyy"
+                            value={getDateByPayDate(state.selectedDate)}
                             onChange={handleChangeSelectedDate}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -159,15 +171,15 @@ export default function AddPaymentButton(props : Props) {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state.rythm}
-                        style={{ width: "100%" }}                        
+                        style={{ width: "100%" }}
                         onChange={handleChangeRythm}
                     >
-                        <MenuItem value={"one-month"}>one-month</MenuItem>
-                        <MenuItem value={"two-month"}>two-month</MenuItem>
-                        <MenuItem value={"three-month"}>three-month</MenuItem>
-                        <MenuItem value={"four-month"}>four-month</MenuItem>
-                        <MenuItem value={"half-year"}>half-year</MenuItem>
-                        <MenuItem value={"year"}>year</MenuItem>
+                        <MenuItem value={Rythm.ONE_MONTH}>one-month</MenuItem>
+                        <MenuItem value={Rythm.TWO_MONTH}>two-month</MenuItem>
+                        <MenuItem value={Rythm.THREE_MONTH}>three-month</MenuItem>
+                        <MenuItem value={Rythm.FOUR_MONTH}>four-month</MenuItem>
+                        <MenuItem value={Rythm.HALF_YEAR}>half-year</MenuItem>
+                        <MenuItem value={Rythm.YEAR}>year</MenuItem>
                     </Select>
                 </DialogContent>
 

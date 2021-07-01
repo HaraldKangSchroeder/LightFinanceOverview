@@ -14,19 +14,19 @@ export default function PaymentData(props: Props) {
     return (
         <div>
             <div className="payment-data-element">
-                <div className="payment-data-element-descriptor">Amount</div> {props.payment.getName()}
+                <div className="payment-data-element-descriptor">Amount</div> {props.payment.getAmount()}
             </div>
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Organziation</div> {props.payment.getOrganization()}
             </div>
             <div className="payment-data-element">
-                <div className="payment-data-element-descriptor">Rythm</div> {props.payment.getRythm()}
+                <div className="payment-data-element-descriptor">Rythm</div> {props.payment.getRythm()} monthly
             </div>
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Days</div>
                 <div style={{ display: "flex", flexWrap: "wrap" }}>
-                    {props.payment.getDates().map(date =>
-                        <DateView day={date.getDay()} month={date.getMonth()} />
+                    {props.payment.getPayDates().map(payDate =>
+                        <DateView day={payDate.date} month={payDate.month} />
                     )}
                 </div>
             </div>

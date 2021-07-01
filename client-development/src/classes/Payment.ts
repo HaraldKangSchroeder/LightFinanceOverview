@@ -1,20 +1,19 @@
-import { PaymentInterface } from "../interfaces/global";
+import { Rythm } from "../enums/enums";
+import { PayDate, PaymentInterface } from "../interfaces/global";
 
 export default class Payment implements PaymentInterface {
     name : string;
     organization : string;
     amount : number;
-    selectedDate : Date;
-    dates : Date[];
-    rythm : string;
+    selectedDate : PayDate;
+    rythm : Rythm;
     type : string;
 
-    constructor(name : string,organization : string, amount : number,selectedDate : Date, dates : Date[], rythm : string, type : string){
+    constructor(name : string,organization : string, amount : number,selectedDate : PayDate, rythm : Rythm, type : string){
         this.name = name;
         this.organization = organization;
         this.amount = amount;
         this.selectedDate = selectedDate;
-        this.dates = dates;
         this.rythm = rythm;
         this.type = type;
     }
@@ -31,15 +30,11 @@ export default class Payment implements PaymentInterface {
         return this.amount;
     }
 
-    getSelectedDate() : Date {
+    getSelectedDate() : PayDate {
         return this.selectedDate;
     }
 
-    getDates() : Date[] {
-        return this.dates;
-    }
-
-    getRythm() : string {
+    getRythm() : Rythm {
         return this.rythm;
     }
 
@@ -53,7 +48,6 @@ export default class Payment implements PaymentInterface {
             this.organization,
             this.amount,
             this.selectedDate,
-            this.dates,
             this.rythm,
             this.type
         );
@@ -66,9 +60,23 @@ export default class Payment implements PaymentInterface {
             organization : this.organization,
             amount : this.amount,
             selectedDate : this.selectedDate,
-            dates : this.dates,
             rythm : this.rythm,
             type : this.type,
         }
+    }
+
+    getPayDates() : PayDate[] {
+        let payDates : {date : number, month : number}[] = [];
+        for(let m = this.selectedDate.month % this.rythm; this.isValidMonthNumber(m); m += this.rythm){
+            payDates.push({
+                date : this.selectedDate.date,
+                month : m
+            })
+        }
+        return payDates;
+    }
+
+    private isValidMonthNumber(month : number) {
+        return month >= 0 && month <= 11;
     }
 }

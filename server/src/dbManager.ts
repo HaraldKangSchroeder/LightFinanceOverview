@@ -3,13 +3,13 @@ const URI = "mongodb://127.0.0.1:27017";
 const DATABASE = "lightFinanceOverviewDb";
 const COLLECTION = "lightFinanceOverview";
 
-// Create a new MongoClient
-const client = new MongoClient(URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
 
 export async function run(callback?: Function) {
+    // client variable needs to be reinstantiated again - src : https://stackoverflow.com/questions/59942238/mongoerror-topology-is-closed-please-connect-despite-established-database-conn
+    var client = new MongoClient(URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
     try {
         await client.connect();
         const database = client.db(DATABASE);
@@ -40,12 +40,9 @@ export async function deleteFinanceEntry(query: object) {
     });
 }
 
-export async function updateFinanceEntry(filter: object, updatedEntry: object) {
-    let updateDoc = {
-        $inc: updatedEntry
-    }
+export async function replaceFinanceEntry(filter: object, updatedEntry: object) {
     await run(async (lightFinanceOverview: Collection<any>) => {
-        await lightFinanceOverview.updateMany(filter, updateDoc);
+        await lightFinanceOverview.replaceOne(filter, updatedEntry);
     })
 }
 

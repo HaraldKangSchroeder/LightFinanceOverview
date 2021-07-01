@@ -20,8 +20,8 @@ export default function DeletePaymentButton({name} : Props) {
 
     const handleDelete = async () => {
         try {
-            let paymentsUnformatted = await axios.post("/delete", { name: name });
-            updatePayments(paymentsUnformatted);
+            let {data} = await axios.post("/delete", { name: name });
+            updatePayments(data);
         }
         catch (e) {
             console.log(e);

@@ -7,8 +7,9 @@ import Payment from "../../classes/Payment";
 import axios from "axios";
 import "./ButtonsPayment.css"
 import { PaymentsContext } from "../../contexts/PaymentsContext";
-import {isButtonStateSubmitAble} from "./Utils";
+import {getDateByPayDate, isButtonStateSubmitAble} from "./Utils";
 import { PaymentInterface } from "../../interfaces/global";
+import { Rythm } from "../../enums/enums";
 
 interface Props {
     payment: Payment
@@ -40,8 +41,8 @@ export default function EditPaymentDataButton({ payment }: Props) {
 
     const handleEdit = async () => {
         try{
-            let paymentsUnformatted = await axios.post("/edit", {originalName: originalName, editedPayment:state});
-            updatePayments(paymentsUnformatted);
+            let {data} = await axios.post("/update", {originalName: originalName, editedPayment:{...state, type: payment.getType()}});
+            updatePayments(data);
         }
         catch(e){
             console.log(e);
@@ -81,10 +82,17 @@ export default function EditPaymentDataButton({ payment }: Props) {
         });
     }
 
-    const handleChangeSelectedDate = (e : any) => {
+    const handleChangeSelectedDate = (e: Date) => {
+        if(e == null || (isNaN(e.getDay()) || isNaN(e.getMonth()) || isNaN(e.getFullYear()))){
+            setState({
+                ...state,
+                selectedDate: null
+            });
+            return;
+        }
         setState({
             ...state,
-            selectedDate : e
+            selectedDate: {date : e.getDate(), month : e.getMonth()}
         });
     }
 
@@ -138,7 +146,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                     />
                     <div className={"dialog-margin"}>
                         <DialogContentText>
-                            Select new date. In case of having a rythm different to yearly, it will add the other dates
+                            Select new date of the current year. In case of having a rythm different to yearly, it will add the other dates
                             within the year respectively.
                         </DialogContentText>
                     </div>
@@ -148,8 +156,8 @@ export default function EditPaymentDataButton({ payment }: Props) {
                             margin="normal"
                             id="date-picker-dialog"
                             label="Date picker dialog"
-                            format="MM/dd/yyyy"
-                            value={state.selectedDate}
+                            format="dd/MM/yyyy"
+                            value={getDateByPayDate(state.selectedDate)}
                             onChange={handleChangeSelectedDate}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
@@ -168,12 +176,12 @@ export default function EditPaymentDataButton({ payment }: Props) {
                         style={{ width: "100%" }}
                         onChange={handleChangeRythm}
                     >
-                        <MenuItem value={"one-month"}>one-month</MenuItem>
-                        <MenuItem value={"two-month"}>two-month</MenuItem>
-                        <MenuItem value={"three-month"}>three-month</MenuItem>
-                        <MenuItem value={"four-month"}>four-month</MenuItem>
-                        <MenuItem value={"half-year"}>half-year</MenuItem>
-                        <MenuItem value={"year"}>year</MenuItem>
+                        <MenuItem value={Rythm.ONE_MONTH}>one-month</MenuItem>
+                        <MenuItem value={Rythm.TWO_MONTH}>two-month</MenuItem>
+                        <MenuItem value={Rythm.THREE_MONTH}>three-month</MenuItem>
+                        <MenuItem value={Rythm.FOUR_MONTH}>four-month</MenuItem>
+                        <MenuItem value={Rythm.HALF_YEAR}>half-year</MenuItem>
+                        <MenuItem value={Rythm.YEAR}>year</MenuItem>
                     </Select>
                 </DialogContent>
 

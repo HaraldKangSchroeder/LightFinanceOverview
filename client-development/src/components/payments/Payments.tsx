@@ -11,7 +11,6 @@ interface Props {
 
 export default function Payments(props: Props) {
     const { payments, setPayments } = useContext(PaymentsContext);
-    console.log(payments);
     return (
         <React.Fragment>
             <div className="subheader">{props.type}</div>
@@ -20,7 +19,7 @@ export default function Payments(props: Props) {
                     <Payment payment={payment} />
                 )}
             </div>
-            <AddPayment type="Income" />
+            <AddPayment type={props.type} />
         </React.Fragment>
     );
 }
