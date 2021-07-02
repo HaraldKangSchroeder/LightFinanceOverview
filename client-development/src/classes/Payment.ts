@@ -1,4 +1,4 @@
-import { Rythm } from "../enums/enums";
+import { PaymentType, Rythm } from "../enums/enums";
 import { PaymentInterface } from "../interfaces/interfaces";
 
 export default class Payment implements PaymentInterface {
@@ -7,9 +7,9 @@ export default class Payment implements PaymentInterface {
     amount : number;
     selectedMonth : number;
     rythm : Rythm;
-    type : string;
+    type : PaymentType;
 
-    constructor(name : string,organization : string, amount : number,selectedMonth : number, rythm : Rythm, type : string){
+    constructor(name : string,organization : string, amount : number,selectedMonth : number, rythm : Rythm, type : PaymentType){
         this.name = name;
         this.organization = organization;
         this.amount = amount;
@@ -38,7 +38,7 @@ export default class Payment implements PaymentInterface {
         return this.rythm;
     }
 
-    getType() : string {
+    getType() : PaymentType {
         return this.type;
     }
 
@@ -71,6 +71,14 @@ export default class Payment implements PaymentInterface {
             payMonths.push(m);
         }
         return payMonths;
+    }
+
+    getPayMonthsUntilMonth(month : number) {
+        let payMonths = this.getPayMonths();
+        let payMonthsUntilMonth = payMonths.filter((item) => {
+            return item <= month;
+        });
+        return payMonthsUntilMonth;
     }
 
     private isValidMonthNumber(month : number) {

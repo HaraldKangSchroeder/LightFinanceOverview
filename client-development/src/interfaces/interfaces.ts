@@ -1,4 +1,4 @@
-import { Month, Rythm } from "../enums/enums";
+import { Month, PaymentType, Rythm } from "../enums/enums";
 
 export interface PaymentInterface {
     name : string;
@@ -6,5 +6,5 @@ export interface PaymentInterface {
     amount : number;
     selectedMonth : Month;
     rythm : Rythm;
-    type? : string; 
+    type? : PaymentType; 
 }

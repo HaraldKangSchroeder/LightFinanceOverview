@@ -1,3 +1,4 @@
+import { PaymentType } from "../enums/enums";
 import Payment from "./Payment";
 
 export default class Payments {
@@ -40,5 +41,25 @@ export default class Payments {
             }
         }
         return paymentsWithType;
+    }
+
+    getBankBalanceUntilMonth(month : number) : number{
+        let bankBalance = 0;
+        for(let payment of this.payments){
+            let paymentCount = payment.getPayMonthsUntilMonth(month).length;
+            let sign = payment.getType() === PaymentType.INCOME ? 1 : -1;
+            bankBalance += sign * paymentCount * payment.getAmount();
+        }
+        return bankBalance;
+    }
+
+    getPaymentsInMonthByType(month : number, type : PaymentType) : Payment[] {
+        let paymentsInMonth : Payment[] = [];
+        for(let payment of this.payments){
+            if(payment.getPayMonthsUntilMonth(month).includes(month) && payment.getType() === type){
+                paymentsInMonth.push(payment);
+            }   
+        }
+        return paymentsInMonth;
     }
 }

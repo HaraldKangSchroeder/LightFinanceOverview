@@ -21,3 +21,8 @@ export enum Month {
     NOV = 10,
     DEC = 11
 }
+
+export enum PaymentType {
+    INCOME = "Income",
+    OUTCOME = "Outcome"
+}

@@ -3,6 +3,10 @@
     margin-bottom: 10px;
 }
 
+.money-transfers-header {
+    margin-top: 20px;
+}
+
 .currency {
     color:rgb(80,80,80);
     width:210px;
@@ -12,6 +16,7 @@
 }
 
 .money-transfer {
+    margin-bottom: 10px;
     padding: 5px;
 }
 
@@ -27,4 +32,8 @@
     .currency-header{
         font-size: 1em;
     }   
+
+    .money-transfer {
+        font-size: 0.9em;
+    }
 }

@@ -1,8 +1,14 @@
 import Slider from '@material-ui/core/Slider';
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import Payments from '../../classes/Payments';
+import { PaymentsContext } from '../../contexts/PaymentsContext';
+import { PaymentType } from '../../enums/enums';
 import "./SliderPayment.css";
 
 export default function SliderPayment() {
+
+    const [selectedMonth, setSelectedMonth] = useState(-1);
+    const { payments } = useContext(PaymentsContext);
 
     const months = [
         {
@@ -59,8 +65,9 @@ export default function SliderPayment() {
         },
     ];
 
-    function valuetext(value: number) {
-        return "" + value;
+    function handleMonth(month: number) {
+        setSelectedMonth(month);
+        return "" + month;
     }
 
     return (
@@ -71,7 +78,7 @@ export default function SliderPayment() {
                     <div style={{ height: "480px" }}>
                         <Slider
                             defaultValue={-1}
-                            getAriaValueText={valuetext}
+                            getAriaValueText={handleMonth}
                             aria-labelledby="discrete-slider-always"
                             step={1}
                             max={11}
@@ -81,22 +88,26 @@ export default function SliderPayment() {
                         />
                     </div>
                     <div className="currency">
-                        <div className="currency-header">Currency :</div>
-                        <div>Value</div>
-                        <br />
-                        <div className="currency-header">Money transfers :</div>
-                        <div className="money-transfer money-transfer-minus">-100 :<br /> Haftbefehl asdfs asdaasd  adasd</div>
-                        <div className="money-transfer money-transfer-minus">-100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-minus">-100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
-                        <div className="money-transfer money-transfer-plus">+100 :<br /> Haftbefehl</div>
+                        <div className="currency-header">Bank Balance :</div>
+                        <div>{payments.getBankBalanceUntilMonth(selectedMonth)} Euro</div>
+
+                        <div className="currency-header money-transfers-header">Money transfers :</div>
+                        {
+                            payments.getPaymentsInMonthByType(selectedMonth, PaymentType.INCOME).map(payment => 
+                                <div className="money-transfer money-transfer-plus"> 
+                                    <div>+ {payment.getAmount()} Euro</div> 
+                                    <div style={{marginTop:"5px"}}>{payment.getName()}</div>
+                                </div>
+                            )
+                        }
+                        {
+                            payments.getPaymentsInMonthByType(selectedMonth, PaymentType.OUTCOME).map(payment => 
+                                <div className="money-transfer money-transfer-minus"> 
+                                    <div>- {payment.getAmount()} Euro</div> 
+                                    <div style={{marginTop:"5px"}}>{payment.getName()}</div>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
             </div >

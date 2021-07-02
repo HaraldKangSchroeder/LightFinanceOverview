@@ -3,6 +3,7 @@ import "./App.css";
 import SliderPayment from '../slider-payment/SliderPayment';
 import Payments from '../payments/Payments';
 import { PaymentsProvider } from '../../contexts/PaymentsContext';
+import { PaymentType } from '../../enums/enums';
 
 
 function App() {
@@ -12,8 +13,8 @@ function App() {
             <Grid item xs={10} md={6} style={{ background: "white" }}>
                 <div className="header">Light Finance Overview</div>
                 <PaymentsProvider>
-                    <Payments type="Outcome" />
-                    <Payments type="Income" />
+                    <Payments type={PaymentType.INCOME} />
+                    <Payments type={PaymentType.OUTCOME} />
                     <SliderPayment />
                 </PaymentsProvider>
             </Grid>
