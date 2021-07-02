@@ -1,3 +1,9 @@
+/*
+general ressources about the usage of mongodb in nodejs -
+https://docs.mongodb.com/drivers/node/current/
+especially "usage examples"
+*/
+
 import { Collection, MongoClient } from "mongodb";
 const URI = "mongodb://127.0.0.1:27017";
 const DATABASE = "lightFinanceOverviewDb";

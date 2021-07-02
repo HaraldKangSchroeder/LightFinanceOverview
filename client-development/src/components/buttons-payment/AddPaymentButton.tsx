@@ -1,13 +1,11 @@
-import DateFnsUtils from "@date-io/date-fns"
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, Select, MenuItem, DialogActions, Button } from "@material-ui/core"
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers"
 import React, { useContext, useState } from "react";
 import AddIcon from '@material-ui/icons/Add';
 import "./ButtonsPayment.css"
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import axios from "axios";
 import { isButtonStateSubmitAble } from "./Utils";
-import { PaymentInterface } from "../../interfaces/global";
+import { PaymentInterface } from "../../interfaces/interfaces";
 import { Month, Rythm } from "../../enums/enums";
 
 interface Props {
@@ -31,7 +29,6 @@ export default function AddPaymentButton(props: Props) {
                 ...state,
                 type: props.type,
             });
-            // console.log(paymentsUnformatted);
             updatePayments(data);
         }
         catch (e) {
@@ -144,7 +141,7 @@ export default function AddPaymentButton(props: Props) {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state.selectedMonth}
-                        style={{ width: "100%" }}
+                        fullWidth
                         onChange={handleChangeSelectedMonth}
                     >
                         <MenuItem value={Month.JAN}>January</MenuItem>
@@ -170,7 +167,7 @@ export default function AddPaymentButton(props: Props) {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state.rythm}
-                        style={{ width: "100%" }}
+                        fullWidth
                         onChange={handleChangeRythm}
                     >
                         <MenuItem value={Rythm.ONE_MONTH}>one-month</MenuItem>

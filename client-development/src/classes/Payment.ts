@@ -1,5 +1,5 @@
 import { Rythm } from "../enums/enums";
-import { PaymentInterface } from "../interfaces/global";
+import { PaymentInterface } from "../interfaces/interfaces";
 
 export default class Payment implements PaymentInterface {
     name : string;

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./AddPayment.css";
 import AddPaymentButton from "../buttons-payment/AddPaymentButton";
 

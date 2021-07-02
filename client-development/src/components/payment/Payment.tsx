@@ -7,7 +7,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { useState } from "react";
 import PaymentData from "../payment-data/PaymentData";
 import PaymentClass from "../../classes/Payment";
-
 interface Props {
     payment: PaymentClass
 }

@@ -1,4 +1,4 @@
-import { PaymentInterface } from "../../interfaces/global";
+import { PaymentInterface } from "../../interfaces/interfaces";
 
 export function isButtonStateSubmitAble(state : PaymentInterface) : boolean{
     return (

@@ -20,3 +20,10 @@
     background: rgb(235,235,235);
     cursor: pointer;
 }
+
+@media all and (max-width: 600px) {
+    .specific-payment-button {
+        margin-right:10px;
+        margin-left:10px;
+    }
+}

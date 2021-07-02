@@ -8,7 +8,7 @@ import axios from "axios";
 import "./ButtonsPayment.css"
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import { isButtonStateSubmitAble } from "./Utils";
-import { PaymentInterface } from "../../interfaces/global";
+import { PaymentInterface } from "../../interfaces/interfaces";
 import { Month, Rythm } from "../../enums/enums";
 
 interface Props {
@@ -146,7 +146,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state.selectedMonth}
-                        style={{ width: "100%" }}
+                        fullWidth
                         onChange={handleChangeSelectedMonth}
                     >
                         <MenuItem value={Month.JAN}>January</MenuItem>
@@ -171,7 +171,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state.rythm}
-                        style={{ width: "100%" }}
+                        fullWidth
                         onChange={handleChangeRythm}
                     >
                         <MenuItem value={Rythm.ONE_MONTH}>one-month</MenuItem>

@@ -1,12 +1,9 @@
 .payment-container {
-    /* background : red */
-    /* border-bottom-style: solid; */
     border-width: 1px;
     border-color: rgba(200, 200, 200, 0.5);
 }
 
 .payment-preview {
-    /* background : green; */
     display: flex;
     justify-content: space-between;
     align-items: center;

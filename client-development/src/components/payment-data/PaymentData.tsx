@@ -7,9 +7,6 @@ interface Props {
     payment: Payment,
 }
 
-// TODO : ADD FLEX WRAP TO DAYS DIV WHEN SCREEN GETTING TOO SMALL
-
-
 export default function PaymentData(props: Props) {
     return (
         <div>
@@ -24,7 +21,7 @@ export default function PaymentData(props: Props) {
             </div>
             <div className="payment-data-element">
                 <div className="payment-data-element-descriptor">Days</div>
-                <div style={{ display: "flex", flexWrap: "wrap" }}>
+                <div className="date-view-container">
                     {props.payment.getPayMonths().map(month =>
                         <DateView month={month} />
                     )}
@@ -37,7 +34,6 @@ export default function PaymentData(props: Props) {
         </div>
     )
 }
-
 interface PropsDateView {
     month : number
 }

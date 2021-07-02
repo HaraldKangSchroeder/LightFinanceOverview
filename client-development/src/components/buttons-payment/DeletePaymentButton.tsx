@@ -5,7 +5,6 @@ import axios from "axios";
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import "./ButtonsPayment.css"
 
-
 interface Props {
     name : string,
 }

@@ -3,14 +3,12 @@ import "./Payments.css";
 import React, { useContext } from "react";
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import AddPayment from "../add-payment/AddPayment";
-
 interface Props {
     type: string,
 }
 
-
 export default function Payments(props: Props) {
-    const { payments, setPayments } = useContext(PaymentsContext);
+    const { payments } = useContext(PaymentsContext);
     return (
         <React.Fragment>
             <div className="subheader">{props.type}</div>
