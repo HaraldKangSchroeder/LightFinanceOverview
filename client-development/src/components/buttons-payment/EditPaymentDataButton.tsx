@@ -25,7 +25,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
         rythm: payment.getRythm(),
     });
     const [originalName, setOriginalName] = useState(payment.getName());
-    const { updatePayments } = useContext(PaymentsContext);
+    const { payments, updatePayments } = useContext(PaymentsContext);
 
     const handleOpen = () => {
         setState({
@@ -89,6 +89,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
         });
     }
 
+    let isNameUnique = !(state.name !== originalName && payments.containsPaymentWithName(state.name));
     return (
         <div>
             <div className="default-payment-button specific-payment-button" onClick={handleOpen}>
@@ -98,7 +99,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                 <DialogTitle id="form-dialog-title">Change data</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Change the name
+                        Change the name (must stay unique).
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -107,6 +108,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                         type="text"
                         value={state.name}
                         fullWidth
+                        error={!isNameUnique}
                         onChange={handleChangeName}
                     />
                     <div className={"dialog-margin"}>
@@ -187,7 +189,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleEdit} color="primary" disabled={!isButtonStateSubmitAble(state)}>
+                    <Button onClick={handleEdit} color="primary" disabled={!isButtonStateSubmitAble(state, isNameUnique)}>
                         Edit
                     </Button>
                 </DialogActions>

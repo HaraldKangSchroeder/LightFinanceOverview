@@ -21,7 +21,7 @@ export default function AddPaymentButton(props: Props) {
         selectedMonth: (new Date()).getMonth(),
         rythm: Rythm.HALF_YEAR,
     });
-    const { updatePayments } = useContext(PaymentsContext);
+    const { payments,updatePayments } = useContext(PaymentsContext);
 
     const handleAdd = async () => {
         try {
@@ -87,6 +87,7 @@ export default function AddPaymentButton(props: Props) {
         });
     }
 
+    let isNameUnique = !payments.containsPaymentWithName(state.name);
     return (
         <React.Fragment>
             <div className="default-payment-button" onClick={handleOpen}>
@@ -96,13 +97,14 @@ export default function AddPaymentButton(props: Props) {
                 <DialogTitle id="form-dialog-title">Add {props.type}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Enter the name of the {props.type}.
+                        Enter the name of the {props.type} (must be unique).
                     </DialogContentText>
                     <TextField
                         autoFocus
                         id="name"
                         label={`Name of ${props.type}`}
                         type="text"
+                        error={!isNameUnique}
                         onChange={handleChangeName}
                         fullWidth
                     />
@@ -183,7 +185,7 @@ export default function AddPaymentButton(props: Props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleAdd} color="primary" disabled={!isButtonStateSubmitAble(state)}>
+                    <Button onClick={handleAdd} color="primary" disabled={!isButtonStateSubmitAble(state, isNameUnique)}>
                         Add
                     </Button>
                 </DialogActions>

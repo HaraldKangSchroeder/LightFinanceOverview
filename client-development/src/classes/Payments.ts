@@ -1,3 +1,4 @@
+import { HighlightSharp } from "@material-ui/icons";
 import { PaymentType } from "../enums/enums";
 import Payment from "./Payment";
 
@@ -61,5 +62,14 @@ export default class Payments {
             }   
         }
         return paymentsInMonth;
+    }
+
+    containsPaymentWithName(name : string) : boolean {
+        for(let payment of this.payments) {
+            if(payment.getName() === name){
+                return true;
+            }
+        }
+        return false;
     }
 }
