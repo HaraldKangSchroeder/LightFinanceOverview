@@ -1,33 +1,9 @@
 * {
     font-family: "Calibri", sans-serif;
-}
-
-.header {
-    color : rgb(80,80,80);
-    font-size: 2em;
-    text-align: center;
-    padding-top: 20px;
-}
-
-.subheader {
-    color : rgb(80,80,80);
-    font-size: 1.7em;
-    margin-top:40px;
-    padding-top:20px;
-    padding-bottom: 15px;
-    text-align: center;
+    padding : 0;
+    margin : 0;
 }
 
 body {
     background : rgb(80,80,80)
-}
-
-@media all and (max-width : 600px ) {
-    .header {
-        font-size: 1.6em;
-    }
-
-    .subheader {
-        font-size: 1.3em;
-    }
 }
