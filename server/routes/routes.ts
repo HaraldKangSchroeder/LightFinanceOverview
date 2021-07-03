@@ -3,6 +3,8 @@ import { deleteFinanceEntry, getFinanceEntries, insertFinanceEntry, replaceFinan
 
 export const router = express.Router();
 
+const TEST_USERNAME = "Harald";
+
 // parse post body content so that it can be accessed - https://stackoverflow.com/questions/5710358/how-to-access-post-form-fields
 router.use(express.json());
 
@@ -11,15 +13,15 @@ router.get("/", (req, res) => {
 });
 
 router.get("/payments", (req, res) => {
-    getFinanceEntries((financeEntries: any) => {
+    getFinanceEntries(TEST_USERNAME, (financeEntries: any) => {
         res.send(financeEntries);
     });
 });
 
 router.post("/create" , checkCreateRequest);
 router.post("/create", async (req, res) => {
-    await insertFinanceEntry(req.body);
-    getFinanceEntries((financeEntries: any) => {
+    await insertFinanceEntry(TEST_USERNAME , req.body);
+    getFinanceEntries(TEST_USERNAME, (financeEntries: any) => {
         res.send(financeEntries);
     });
 });
@@ -27,10 +29,11 @@ router.post("/create", async (req, res) => {
 router.post("/udpate" , checkUpdateRequest);
 router.post("/update", async (req, res) => {
     await replaceFinanceEntry(
-        { name: req.body.originalName },
+        TEST_USERNAME,
+        req.body.originalName,
         req.body.editedPayment
     );
-    getFinanceEntries((financeEntries: any) => {
+    getFinanceEntries(TEST_USERNAME, (financeEntries: any) => {
         res.send(financeEntries);
     });
 })
@@ -38,10 +41,8 @@ router.post("/update", async (req, res) => {
 
 router.post("/delete", checkDeleteRequest);
 router.post("/delete", async (req, res) => {
-    await deleteFinanceEntry({
-        name: req.body.name
-    });
-    getFinanceEntries((financeEntries: any) => {
+    await deleteFinanceEntry(TEST_USERNAME, req.body.name);
+    getFinanceEntries(TEST_USERNAME, (financeEntries: any) => {
         res.send(financeEntries);
     });
 });
@@ -53,7 +54,7 @@ function checkDeleteRequest(req : any,res : any,next : any){
         return next();
     }
     console.log("Request not possible due to invalid data format");
-    getFinanceEntries((financeEntries : any) => {
+    getFinanceEntries(TEST_USERNAME, (financeEntries : any) => {
         res.send(financeEntries);
     });
 }
@@ -70,7 +71,7 @@ function checkCreateRequest(req : any, res : any, next : any){
         return next();
     }
     console.log("Request not possible due to invalid data format");
-    getFinanceEntries((financeEntries : any) => {
+    getFinanceEntries(TEST_USERNAME, (financeEntries : any) => {
         res.send(financeEntries);
     });
 }

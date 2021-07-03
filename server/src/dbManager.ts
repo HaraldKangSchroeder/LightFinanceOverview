@@ -4,11 +4,38 @@ https://docs.mongodb.com/drivers/node/current/
 especially "usage examples"
 */
 
-import { Collection, MongoClient } from "mongodb";
+import { Collection, MongoClient, Double } from "mongodb";
+import schema from "./dbSchema";
 const URI = "mongodb://127.0.0.1:27017";
 const DATABASE = "lightFinanceOverviewDb";
 const COLLECTION = "lightFinanceOverview";
 
+init();
+
+async function init() {
+    var client = new MongoClient(URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+    try {
+        await client.connect();
+        const database = client.db(DATABASE);
+        // create collection with schema - https://docs.mongodb.com/manual/core/schema-validation/
+        await database.createCollection(COLLECTION, schema);
+        console.log("Init : Connected successfully to server");
+    } catch (e) {
+        console.log(e);
+    }
+    finally {
+        // Ensures that the client will close when you finish/error
+        console.log("Init : disconnect");
+        await client.close();
+        // create index on attribute name to secure that no duplicate payments exist
+        run(async (collection: Collection<any>) => {
+            await collection.createIndex({ "username": "text" }, { unique: true });
+        })
+    }
+}
 
 export async function run(callback?: Function) {
     // client variable needs to be reinstantiated again - src : https://stackoverflow.com/questions/59942238/mongoerror-topology-is-closed-please-connect-despite-established-database-conn
@@ -34,28 +61,34 @@ export async function run(callback?: Function) {
     }
 }
 
-export async function insertFinanceEntry(entry: object) {
+export async function insertFinanceEntry(username : string, entry: any) {
+    entry.amount = new Double(entry.amount);
     await run(async (lightFinanceOverview: Collection<any>) => {
-        await lightFinanceOverview.insertOne(entry);
+        await lightFinanceOverview.updateMany({username : username},{ "$addToSet" : {data : entry}});
     })
 }
 
-export async function deleteFinanceEntry(query: object) {
+export async function deleteFinanceEntry(username : string, name: string) {
     await run(async (lightFinanceOverview: Collection<any>) => {
-        await lightFinanceOverview.deleteMany(query);
+        await lightFinanceOverview.updateMany(
+            { username : username },
+            { "$pull" : { data : {name : name}}}
+        )
     });
 }
 
-export async function replaceFinanceEntry(filter: object, updatedEntry: object) {
+export async function replaceFinanceEntry(username: string, originalName : string, updatedEntry: any) {
+    await deleteFinanceEntry(username, originalName);
+    await insertFinanceEntry(username, updatedEntry);
+}
+
+export async function getFinanceEntries(username : string, callback: Function) {
+    let data : any = null;
     await run(async (lightFinanceOverview: Collection<any>) => {
-        await lightFinanceOverview.replaceOne(filter, updatedEntry);
+        data = await lightFinanceOverview.find({username : username}).toArray();
+    });
+    let entries = data[0].data.sort((a : any,b : any) => {
+        a.name > b.name;
     })
-}
-
-export async function getFinanceEntries(callback : Function) {
-    let data = null;
-    await run(async (lightFinanceOverview: Collection<any>) => {
-        data = await lightFinanceOverview.find().toArray();
-    });
-    callback(data);
+    callback(entries);
 }

@@ -57,7 +57,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
     const handleChangeAmount = (e: any) => {
         setState({
             ...state,
-            amount: parseInt(e.target.value)
+            amount: parseFloat(e.target.value)
         });
     }
 
