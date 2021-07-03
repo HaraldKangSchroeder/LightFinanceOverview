@@ -7,6 +7,7 @@ import {
 import "./App.css";
 import LightFinanceOverview from "../lightFinanceOverview/LightFinanceOverview";
 import Login from "../login/Login";
+import CreateUser from "../create-user/CreateUser";
 
 function App() {
     return (
@@ -14,6 +15,9 @@ function App() {
             <Switch>
                 <Route exact path="/Login">
                     <Login />
+                </Route>
+                <Route exact path="/Create">
+                    <CreateUser />
                 </Route>
                 <Route exact path="/LightFinanceOverview">
                     <LightFinanceOverview />

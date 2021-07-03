@@ -1,4 +1,4 @@
-.login-container {
+.create-user-container {
     display : flex;
     /* background : red; */
     align-items: center;
@@ -7,7 +7,7 @@
     color : rgb(80,80,80);
 }
 
-.login-inner-container {
+.create-user-inner-container {
     padding : 50px;
     border-radius: 10px;
     width : 300px;
@@ -16,7 +16,7 @@
 }
 
 @media all and (max-width : 600px) {
-    .login-inner-container {
+    .create-user-inner-container {
         padding : 30px;
         border-radius: 10px;
         width : 230px;
@@ -25,22 +25,22 @@
     }    
 }
 
-.login-header {
+.create-user-header {
     font-size: 2em;
     margin-bottom: 50px;
 }
 
-.login-user-input {
+.create-user-user-input {
     margin-top: 30px;
 }
 
-.login-button-container {
+.create-user-button-container {
     margin-top: 50px;
     display : flex;
     justify-content: space-evenly;
 }
 
-.login-button {
+.create-user-button {
     background: rgb(245,245,245);
     border-radius: 3px;
     display : flex;
@@ -57,7 +57,7 @@
     font-size: 1em;
 }
 
-.login-button:hover {
+.create-user-button:hover {
     background: rgb(235,235,235);
     cursor: pointer;
 }

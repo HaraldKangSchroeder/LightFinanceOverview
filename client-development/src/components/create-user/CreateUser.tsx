@@ -1,9 +1,9 @@
 import { TextField } from "@material-ui/core";
 import { useState } from "react";
-import "./Login.css";
+import "./CreateUser.css";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function CreateUser() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -20,18 +20,18 @@ export default function Login() {
     }
 
     return (
-        <div className="login-container">
-            <div className="login-inner-container">
-                <div className="login-header">LOGIN</div>
-                <div className="login-user-input">
+        <div className="create-user-container">
+            <div className="create-user-inner-container">
+                <div className="create-user-header">CREATE USER</div>
+                <div className="create-user-user-input">
                     <TextField fullWidth id="outlined-basic" label="Username" variant="outlined" onChange={handleChangeUsername} value={username} />
                 </div>
-                <div className="login-user-input">
+                <div className="create-user-user-input">
                     <TextField fullWidth id="outlined-basic" type="password" label="Password" variant="outlined" onChange={handleChangePassword} value={password} />
                 </div>
-                <div className="login-button-container">
-                    <Link className="link" to="/Create"><div className="login-button">CREATE USER</div></Link>
-                    <div onClick={handleSubmit} className="login-button">LOGIN</div>
+                <div className="create-user-button-container">
+                    <Link className="link" to="/Login"><div className="create-user-button">CANCEL</div></Link>
+                    <div onClick={handleSubmit} className="create-user-button">CREATE</div>
                 </div>
             </div>
         </div>
