@@ -2,10 +2,17 @@ import { TextField } from "@material-ui/core";
 import { useState } from "react";
 import "./CreateUser.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-export default function CreateUser() {
+interface Props {
+    setIsLoggedIn : (isLoggedIn : boolean) => void,
+    setLoggedUsername : (username : string) => void
+}
+
+export default function CreateUser({setIsLoggedIn, setLoggedUsername} : Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [showError, setShowError] = useState(false);
 
     const handleChangeUsername = (e: any) => {
         setUsername(e.target.value);
@@ -15,8 +22,19 @@ export default function CreateUser() {
         setPassword(e.target.value);
     }
 
-    const handleSubmit = () => {
-        console.log("handle submit");
+    const handleSubmit = async () => {
+        if(!isSubmitAble(username,password)) return;
+        let {data} = await axios.post("/createUser", {
+            username : username,
+            password : password,
+        });
+        if(data){
+            setLoggedUsername(username);
+            setIsLoggedIn(true);
+        }
+        else{
+            setShowError(true);
+        }
     }
 
     return (
@@ -31,9 +49,14 @@ export default function CreateUser() {
                 </div>
                 <div className="create-user-button-container">
                     <Link className="link" to="/Login"><div className="create-user-button">CANCEL</div></Link>
-                    <div onClick={handleSubmit} className="create-user-button">CREATE</div>
+                    <div onClick={handleSubmit} className={isSubmitAble(username,password) ? "create-user-button" : "create-user-button-disabled"}>CREATE</div>
                 </div>
+                <div style={{opacity : showError ? 1 : 0}} className="create-user-error-text">Username already exists</div>
             </div>
         </div>
     )
+}
+
+function isSubmitAble(username : string, password : string) : boolean{
+    return username.length > 0 && password.length > 0;
 }

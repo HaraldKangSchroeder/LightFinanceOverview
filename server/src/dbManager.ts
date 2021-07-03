@@ -37,12 +37,13 @@ async function init() {
     }
 }
 
-export async function run(callback?: Function) {
+export async function run(callback?: Function) : Promise<boolean>{
     // client variable needs to be reinstantiated again - src : https://stackoverflow.com/questions/59942238/mongoerror-topology-is-closed-please-connect-despite-established-database-conn
     var client = new MongoClient(URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
+    let worked = true;
     try {
         await client.connect();
         const database = client.db(DATABASE);
@@ -52,13 +53,32 @@ export async function run(callback?: Function) {
             await callback(lightFinanceOverview);
         }
     } catch (e) {
+        worked = false;
         console.log(e);
     }
     finally {
         // Ensures that the client will close when you finish/error
         console.log("disconnect");
         await client.close();
+        return worked;
     }
+}
+
+export async function createUserEntry(username : string, password : string){
+    return await run(async (lightFinanceOverview : Collection<any>) => {
+        await lightFinanceOverview.insertOne({username : username, password : password, data : []});
+    });
+}
+
+export async function getUserEntry(username : string, password : string){
+    let data : any = null;
+    await run(async (lightFinanceOverview : Collection<any>) => {
+        data = await lightFinanceOverview.find({username : username, password : password}).toArray();
+    });
+    console.log("-----------------------------------------------")
+    console.log(data);
+    console.log("-----------------------------------------------")
+    return data;
 }
 
 export async function insertFinanceEntry(username : string, entry: any) {

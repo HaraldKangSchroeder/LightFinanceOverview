@@ -1,0 +1,37 @@
+POST http://localhost:8123/login
+Content-Type: application/json
+
+{
+    "username" : "kevin"
+}
+
+#### 
+## example that shows a not working create user request since no token is used
+POST http://localhost:8123/createUser
+Content-Type: application/json
+
+{
+    "username" : "kevin",
+    "password" : "password"
+}
+
+#### 
+## working example
+POST http://localhost:8123/createUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoia2V2aW4iLCJpYXQiOjE2MjUzMjUyMjQsImV4cCI6MTYyNTMyNTIzOX0.LOoS8dwBrGiKB839Vo9V0bSOnpcb1dh8HjKdxi1w0fU
+Content-Type: application/json
+
+{
+    "username" : "kevin",
+    "password" : "password"
+}
+####
+
+## example that shows a not working create user request since no token is used
+POST http://localhost:8123/login
+Content-Type: application/json
+
+{
+    "username" : "kevin",
+    "password" : "passwords"
+}

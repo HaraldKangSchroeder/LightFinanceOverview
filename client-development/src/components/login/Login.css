@@ -61,3 +61,8 @@
     background: rgb(235,235,235);
     cursor: pointer;
 }
+
+.login-error-text{
+    color : red;
+    margin-top: 20px;
+}

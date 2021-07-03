@@ -5,7 +5,12 @@ import Payments from '../payments/Payments';
 import { PaymentsProvider } from '../../contexts/PaymentsContext';
 import { PaymentType } from '../../enums/enums';
 
-function LightFinanceOverview() {
+interface Props {
+    setIsLoggedIn : (isLoggedIn : boolean) => void,
+    setLoggedUsername : (username : string) => void
+}
+
+function LightFinanceOverview({setIsLoggedIn, setLoggedUsername} : Props) {
     return (
         <Grid container spacing={2}>
             <Grid item xs={1} md={3} />
