@@ -35,3 +35,33 @@ Content-Type: application/json
     "username" : "kevin",
     "password" : "passwords"
 }
+
+###
+
+POST http://localhost:8123/login
+Content-Type: application/json
+
+{
+    "username" : "mumata",
+    "password" : "test"
+}
+
+###
+
+POST http://localhost:8123/create
+Content-Type: application/json
+
+{
+    "name" : "testname",
+    "organization" : "supercool",
+    "amount" : 10,
+    "selectedMonth" : 10,
+    "rythm" : 3,
+    "type" : "Income"
+}
+
+###
+
+GET http://localhost:8123/logout
+Content-Type: application/json
+

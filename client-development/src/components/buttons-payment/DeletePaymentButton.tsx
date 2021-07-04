@@ -4,6 +4,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import axios from "axios";
 import { PaymentsContext } from "../../contexts/PaymentsContext";
 import "./ButtonsPayment.css"
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface Props {
     name : string,
@@ -12,6 +13,7 @@ interface Props {
 export default function DeletePaymentButton({name} : Props) {
     const [open, setOpen] = useState(false);
     const { updatePayments } = useContext(PaymentsContext);
+    const { setAuth } = useContext(AuthContext);
 
     const handleClose = () => {
         setOpen(false);
@@ -23,7 +25,7 @@ export default function DeletePaymentButton({name} : Props) {
             updatePayments(data);
         }
         catch (e) {
-            console.log(e);
+            setAuth(false);
         }
         handleClose();
     }

@@ -10,6 +10,7 @@ import { PaymentsContext } from "../../contexts/PaymentsContext";
 import { isButtonStateSubmitAble } from "./Utils";
 import { PaymentInterface } from "../../interfaces/interfaces";
 import { Month, Rythm } from "../../enums/enums";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface Props {
     payment: Payment
@@ -26,6 +27,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
     });
     const [originalName, setOriginalName] = useState(payment.getName());
     const { payments, updatePayments } = useContext(PaymentsContext);
+    const { setAuth } = useContext(AuthContext);
 
     const handleOpen = () => {
         setState({
@@ -45,7 +47,7 @@ export default function EditPaymentDataButton({ payment }: Props) {
             updatePayments(data);
         }
         catch (e) {
-            console.log(e);
+            setAuth(false);
         }
         handleClose();
     }

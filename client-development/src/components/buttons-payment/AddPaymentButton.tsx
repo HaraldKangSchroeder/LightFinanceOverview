@@ -7,6 +7,8 @@ import axios from "axios";
 import { isButtonStateSubmitAble } from "./Utils";
 import { PaymentInterface } from "../../interfaces/interfaces";
 import { Month, Rythm } from "../../enums/enums";
+import { Redirect } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface Props {
     type: string
@@ -21,7 +23,8 @@ export default function AddPaymentButton(props: Props) {
         selectedMonth: (new Date()).getMonth(),
         rythm: Rythm.HALF_YEAR,
     });
-    const { payments,updatePayments } = useContext(PaymentsContext);
+    const { payments,updatePayments} = useContext(PaymentsContext);
+    const { setAuth } = useContext(AuthContext);
 
     const handleAdd = async () => {
         try {
@@ -32,7 +35,7 @@ export default function AddPaymentButton(props: Props) {
             updatePayments(data);
         }
         catch (e) {
-            console.log(e);
+            setAuth(false);
         }
         handleClose();
     }
@@ -86,7 +89,6 @@ export default function AddPaymentButton(props: Props) {
             rythm: e.target.value
         });
     }
-
     let isNameUnique = !payments.containsPaymentWithName(state.name);
     return (
         <React.Fragment>

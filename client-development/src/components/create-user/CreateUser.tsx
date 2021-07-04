@@ -1,18 +1,16 @@
 import { TextField } from "@material-ui/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "./CreateUser.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContext";
 
-interface Props {
-    setIsLoggedIn : (isLoggedIn : boolean) => void,
-    setLoggedUsername : (username : string) => void
-}
 
-export default function CreateUser({setIsLoggedIn, setLoggedUsername} : Props) {
+export default function CreateUser() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showError, setShowError] = useState(false);
+    const Auth = useContext(AuthContext);
 
     const handleChangeUsername = (e: any) => {
         setUsername(e.target.value);
@@ -24,15 +22,16 @@ export default function CreateUser({setIsLoggedIn, setLoggedUsername} : Props) {
 
     const handleSubmit = async () => {
         if(!isSubmitAble(username,password)) return;
-        let {data} = await axios.post("/createUser", {
-            username : username,
-            password : password,
-        });
-        if(data){
-            setLoggedUsername(username);
-            setIsLoggedIn(true);
+        try {
+            await axios.post("/createUser", {
+                username : username,
+                password : password,
+            });
+            Auth.setUsername(username);
+            Auth.setAuth(true);
+            return;
         }
-        else{
+        catch (e) {
             setShowError(true);
         }
     }

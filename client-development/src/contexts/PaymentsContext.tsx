@@ -8,7 +8,11 @@ interface Value {
 
 export const PaymentsContext = createContext<Value>(null);
 
-export function PaymentsProvider(props: any) {
+interface Props {
+    children? : any,
+}
+
+export function PaymentsProvider(props : Props) {
     const [payments, setPayments] = useState<Payments>(new Payments());
 
     const requestPayments = async () => {
@@ -30,7 +34,7 @@ export function PaymentsProvider(props: any) {
     }, []);
 
     return (
-        <PaymentsContext.Provider value={{ payments: payments, updatePayments: updatePayments }}>
+        <PaymentsContext.Provider value={{ payments: payments, updatePayments: updatePayments}}>
             {props.children}
         </PaymentsContext.Provider>
     )
