@@ -6,7 +6,6 @@ export const verifyCookie = async (req : express.Request, res : express.Response
     if(!sessionId) return res.sendStatus(403);
     let sessionEntry = await getSessionEntry(sessionId);
     if(!sessionEntry) return res.sendStatus(403);
-    console.log("WALAAAAAAAAAAAAAAAAAAAAAAA");
     return next();
 }
 
@@ -30,7 +29,6 @@ export const handleLogin = async (req : express.Request, res : express.Response)
     let userEntry = await getUserEntry(username, password);
     if (userEntry) {
         let sessionId = Math.random().toString();
-        console.log("NEW SESSION ID  : " + sessionId);
         await createSessionEntry(username, sessionId);
         res.cookie("sessionId", sessionId);
         return res.sendStatus(200);
@@ -79,8 +77,6 @@ export const handleDeletePayment = async (req : express.Request, res : express.R
 }
 
 export const handleLogout = async (req : express.Request, res : express.Response) => {
-    console.log("handle logout");
-    console.log("---------------------------------");
     await deleteSessionEntry(req.cookies.sessionId);
     res.sendStatus(200);
 }
@@ -89,7 +85,6 @@ export const checkDeletePaymentRequest = async (req: express.Request, res: expre
     if (req.body.name != null) {
         return next();
     }
-    console.log("Request not possible due to invalid data format");
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     sendFinanceEntries(username, res);
 }
@@ -105,7 +100,6 @@ export const checkCreatePaymentRequest = async (req: express.Request, res: expre
     ) {
         return next();
     }
-    console.log("Request not possible due to invalid data format");
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     sendFinanceEntries(username, res);
 }

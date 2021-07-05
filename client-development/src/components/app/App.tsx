@@ -26,7 +26,6 @@ function App() {
     // this only prevents the short preview of the login screen in case of beeing authorized already
     if(!loaded) return <div></div>
 
-    console.log("Auth at top : " + auth);
     return (
         <AuthProvider auth={auth} setAuth={setAuth} username={username}>
             <Router>

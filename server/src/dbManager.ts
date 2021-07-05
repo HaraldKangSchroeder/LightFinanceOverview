@@ -26,19 +26,15 @@ async function init() {
         // create collection with schema - https://docs.mongodb.com/manual/core/schema-validation/
         await database.createCollection(COLLECTION_LIGHT_FINANCE_OVERVIEW, schemaLightFinanceOverview);
         await database.createCollection(COLLECTION_SESSION, schemaSession);
-        console.log("Init : Connected successfully to server");
     } catch (e) {
         console.log(e);
     }
     finally {
         // Ensures that the client will close when you finish/error
-        console.log("Init : disconnect");
         await client.close();
         // create index on attribute name to secure that no duplicate payments exist
         await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (collection: Collection<any>) => {
-            console.log("CREATE USERNAME INDEX");
             await collection.createIndex({ "username": 1 }, { unique: true });
-            console.log("-------------------------------------------------------");
         })
         await run(COLLECTION_SESSION,async (collection: Collection<any>) => {
             await collection.createIndex({ "sessionId": 1 }, { unique: true});
@@ -60,7 +56,6 @@ export async function run(collection : string, callback?: Function) : Promise<bo
         await client.connect();
         const database = client.db(DATABASE);
         const lightFinanceOverview = database.collection(collection);
-        console.log("Connected successfully to server");
         if (callback) {
             await callback(lightFinanceOverview);
         }
@@ -70,8 +65,6 @@ export async function run(collection : string, callback?: Function) : Promise<bo
     }
     finally {
         // Ensures that the client will close when you finish/error
-        console.log("disconnect");
-        console.log(":::::::::::::::::::::::::::::::::::::::::::::")
         await client.close();
         return worked;
     }
@@ -79,7 +72,6 @@ export async function run(collection : string, callback?: Function) : Promise<bo
 
 
 export async function createSessionEntry(username : string, sessionId : string){
-    console.log("SESSION ID IN CREATE SESSION ENTRY : " + sessionId);
     return await run(COLLECTION_SESSION,async (session : Collection<any>) => {
         await session.insertOne({username : username, sessionId : sessionId, createdAt : new Date()});
     });
