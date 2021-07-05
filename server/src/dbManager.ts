@@ -5,10 +5,13 @@ especially "usage examples"
 */
 
 import { Collection, MongoClient, Double } from "mongodb";
-import schema from "./dbSchema";
+import {schemaLightFinanceOverview, schemaSession} from "./dbSchema";
+import bcrypt from "bcrypt";
+
 const URI = "mongodb://127.0.0.1:27017";
 const DATABASE = "lightFinanceOverviewDb";
-const COLLECTION = "lightFinanceOverview";
+const COLLECTION_LIGHT_FINANCE_OVERVIEW = "lightFinanceOverview";
+const COLLECTION_SESSION = "session";
 
 init();
 
@@ -21,7 +24,8 @@ async function init() {
         await client.connect();
         const database = client.db(DATABASE);
         // create collection with schema - https://docs.mongodb.com/manual/core/schema-validation/
-        await database.createCollection(COLLECTION, schema);
+        await database.createCollection(COLLECTION_LIGHT_FINANCE_OVERVIEW, schemaLightFinanceOverview);
+        await database.createCollection(COLLECTION_SESSION, schemaSession);
         console.log("Init : Connected successfully to server");
     } catch (e) {
         console.log(e);
@@ -31,13 +35,21 @@ async function init() {
         console.log("Init : disconnect");
         await client.close();
         // create index on attribute name to secure that no duplicate payments exist
-        run(async (collection: Collection<any>) => {
-            await collection.createIndex({ "username": "text" }, { unique: true });
+        await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (collection: Collection<any>) => {
+            console.log("CREATE USERNAME INDEX");
+            await collection.createIndex({ "username": 1 }, { unique: true });
+            console.log("-------------------------------------------------------");
+        })
+        await run(COLLECTION_SESSION,async (collection: Collection<any>) => {
+            await collection.createIndex({ "sessionId": 1 }, { unique: true});
+        })
+        await run(COLLECTION_SESSION,async (collection: Collection<any>) => {
+            await collection.createIndex({ "createdAt": 1 }, { expireAfterSeconds : 10});
         })
     }
 }
 
-export async function run(callback?: Function) : Promise<boolean>{
+export async function run(collection : string, callback?: Function) : Promise<boolean>{
     // client variable needs to be reinstantiated again - src : https://stackoverflow.com/questions/59942238/mongoerror-topology-is-closed-please-connect-despite-established-database-conn
     var client = new MongoClient(URI, {
         useNewUrlParser: true,
@@ -47,7 +59,7 @@ export async function run(callback?: Function) : Promise<boolean>{
     try {
         await client.connect();
         const database = client.db(DATABASE);
-        const lightFinanceOverview = database.collection(COLLECTION);
+        const lightFinanceOverview = database.collection(collection);
         console.log("Connected successfully to server");
         if (callback) {
             await callback(lightFinanceOverview);
@@ -59,37 +71,72 @@ export async function run(callback?: Function) : Promise<boolean>{
     finally {
         // Ensures that the client will close when you finish/error
         console.log("disconnect");
+        console.log(":::::::::::::::::::::::::::::::::::::::::::::")
         await client.close();
         return worked;
     }
 }
 
+
+export async function createSessionEntry(username : string, sessionId : string){
+    console.log("SESSION ID IN CREATE SESSION ENTRY : " + sessionId);
+    return await run(COLLECTION_SESSION,async (session : Collection<any>) => {
+        await session.insertOne({username : username, sessionId : sessionId, createdAt : new Date()});
+    });
+}
+
+export async function deleteSessionEntry(sessionId : string){
+    await run(COLLECTION_SESSION,async (session: Collection<any>) => {
+        await session.deleteMany(
+            {"sessionId" : sessionId}
+        );
+    });
+}
+
+export async function getSessionEntry(sessionId : string) : Promise<{username : string, sessionId : string}> {
+    let data : any = null;
+    await run(COLLECTION_SESSION,async (session : Collection<any>) => {
+        data = await session.find({sessionId : sessionId}).toArray();
+    });
+    if(data.length === 0) return null;
+    return data[0];
+}
+
+
 export async function createUserEntry(username : string, password : string){
-    return await run(async (lightFinanceOverview : Collection<any>) => {
-        await lightFinanceOverview.insertOne({username : username, password : password, data : []});
+    let hashedPassword = await bcrypt.hash(password, 10);
+    return await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview : Collection<any>) => {
+        await lightFinanceOverview.insertOne({username : username, password : hashedPassword, data : []});
     });
 }
 
 export async function getUserEntry(username : string, password : string){
     let data : any = null;
-    await run(async (lightFinanceOverview : Collection<any>) => {
-        data = await lightFinanceOverview.find({username : username, password : password}).toArray();
+    await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview : Collection<any>) => {
+        data = await lightFinanceOverview.find({username : username}).toArray();
     });
-    console.log("-----------------------------------------------")
-    console.log(data);
-    console.log("-----------------------------------------------")
-    return data;
+    if(data.length === 0) return null;
+    let userEntry = data[0];
+    try{
+        if(await bcrypt.compare(password, userEntry.password)){
+            return userEntry;
+        }
+    }
+    catch (e) {
+        return null;
+    }
+    return null;
 }
 
 export async function insertFinanceEntry(username : string, entry: any) {
     entry.amount = new Double(entry.amount);
-    await run(async (lightFinanceOverview: Collection<any>) => {
+    await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview: Collection<any>) => {
         await lightFinanceOverview.updateMany({username : username},{ "$addToSet" : {data : entry}});
     })
 }
 
 export async function deleteFinanceEntry(username : string, name: string) {
-    await run(async (lightFinanceOverview: Collection<any>) => {
+    await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview: Collection<any>) => {
         await lightFinanceOverview.updateMany(
             { username : username },
             { "$pull" : { data : {name : name}}}
@@ -104,7 +151,7 @@ export async function replaceFinanceEntry(username: string, originalName : strin
 
 export async function getFinanceEntries(username : string, callback: Function) {
     let data : any = null;
-    await run(async (lightFinanceOverview: Collection<any>) => {
+    await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview: Collection<any>) => {
         data = await lightFinanceOverview.find({username : username}).toArray();
     });
     let entries = data[0].data.sort((a : any,b : any) => {

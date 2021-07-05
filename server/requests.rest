@@ -28,12 +28,12 @@ Content-Type: application/json
 ####
 
 ## example that shows a not working create user request since no token is used
-POST http://localhost:8123/login
+POST http://localhost:8123/createUser
 Content-Type: application/json
 
 {
     "username" : "kevin",
-    "password" : "passwords"
+    "password" : "password"
 }
 
 ###
@@ -42,8 +42,8 @@ POST http://localhost:8123/login
 Content-Type: application/json
 
 {
-    "username" : "mumata",
-    "password" : "test"
+    "username" : "kevin",
+    "password" : "password"
 }
 
 ###
@@ -63,5 +63,4 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8123/logout
-Content-Type: application/json
 

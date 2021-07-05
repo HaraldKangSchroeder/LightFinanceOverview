@@ -1,4 +1,25 @@
-const schema = {
+
+export const schemaSession = {
+    validator: {
+        $jsonSchema : {
+            bsonType: "object",
+            required: ["username", "sessionId"],
+            properties : {
+                username : {
+                    bsonType : "string"
+                },
+                sessionId : {
+                    bsonType : "string"
+                },
+                createdAt : {
+                    bsonType : "Date"
+                }
+            }
+        }
+    }
+}
+
+export const schemaLightFinanceOverview = {
     validator: {
         $jsonSchema: {
             bsonType: "object",
@@ -42,5 +63,3 @@ const schema = {
         }
     }
 };
-
-export default schema;

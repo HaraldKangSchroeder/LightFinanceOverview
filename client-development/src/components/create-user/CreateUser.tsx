@@ -47,7 +47,7 @@ export default function CreateUser() {
                     <TextField fullWidth id="outlined-basic" type="password" label="Password" variant="outlined" onChange={handleChangePassword} value={password} />
                 </div>
                 <div className="create-user-button-container">
-                    <Link className="link" to="/Login"><div className="create-user-button">CANCEL</div></Link>
+                    <Link className="link" to="/"><div className="create-user-button">CANCEL</div></Link>
                     <div onClick={handleSubmit} className={isSubmitAble(username,password) ? "create-user-button" : "create-user-button-disabled"}>CREATE</div>
                 </div>
                 <div style={{opacity : showError ? 1 : 0}} className="create-user-error-text">Username already exists</div>

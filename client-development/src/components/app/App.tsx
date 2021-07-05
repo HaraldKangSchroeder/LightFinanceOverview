@@ -2,16 +2,15 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
     Redirect
 } from "react-router-dom";
 import "./App.css";
 import LightFinanceOverview from "../lightFinanceOverview/LightFinanceOverview";
 import Login from "../login/Login";
 import CreateUser from "../create-user/CreateUser";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { AuthContext, AuthProvider } from "../../contexts/AuthContext";
+import { AuthProvider } from "../../contexts/AuthContext";
 
 axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
 
@@ -36,18 +35,21 @@ function App() {
                         bool={!auth}
                         redirectPath="/LightFinanceOverview"
                         path="/Create"
+                        exact={true}
                         Component={<CreateUser />}
                     />
                     <ProtectedRoute
                         bool={auth}
                         redirectPath="/"
                         path="/LightFinanceOverview"
+                        exact={true}
                         Component={<LightFinanceOverview />}
                     />
                     <ProtectedRoute
                         bool={!auth}
                         redirectPath="/LightFinanceOverview"
                         path="/"
+                        exact={false}
                         Component={<Login />}
                     />
                 </Switch>
@@ -56,9 +58,9 @@ function App() {
     )
 }
 
-const ProtectedRoute = ({ Component, bool, redirectPath, path }: any) => {
+const ProtectedRoute = ({ Component, bool, redirectPath, exact, path }: any) => {
     return (
-        <Route exact path={path}>
+        <Route exact={exact} path={path}>
             {bool ? Component : <Redirect to={redirectPath}/>}
         </Route>
     )
