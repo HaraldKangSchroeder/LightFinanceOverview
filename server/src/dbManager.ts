@@ -8,8 +8,7 @@ import { Collection, MongoClient, Double } from "mongodb";
 import {schemaLightFinanceOverview, schemaSession} from "./dbSchema";
 import bcrypt from "bcrypt";
 
-// const URL = "mongodb://127.0.0.1:27017";
-const URL = "mongodb://mongo:27017";
+const URL = process.env.NODE_ENV === "production" ? "mongodb://mongo:27017" : "mongodb://127.0.0.1:27017";
 const DATABASE = "lightFinanceOverviewDb";
 const COLLECTION_LIGHT_FINANCE_OVERVIEW = "lightFinanceOverview";
 const COLLECTION_SESSION = "session";
@@ -41,7 +40,7 @@ async function init() {
             await collection.createIndex({ "sessionId": 1 }, { unique: true});
         })
         await run(COLLECTION_SESSION,async (collection: Collection<any>) => {
-            await collection.createIndex({ "createdAt": 1 }, { expireAfterSeconds : 10});
+            await collection.createIndex({ "createdAt": 1 }, { expireAfterSeconds : 1200});
         })
     }
 }
