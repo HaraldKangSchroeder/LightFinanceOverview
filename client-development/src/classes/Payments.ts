@@ -44,20 +44,31 @@ export default class Payments {
         return paymentsWithType;
     }
 
-    getBankBalanceUntilMonth(month : number) : number{
-        let bankBalance = 0;
-        for(let payment of this.payments){
-            let paymentCount = payment.getPayMonthsUntilMonth(month).length;
-            let sign = payment.getType() === PaymentType.INCOME ? 1 : -1;
-            bankBalance += sign * paymentCount * payment.getAmount();
+    getBalanceUntilMonth(month : number) : number{
+        let balance = 0;
+        for(let i = 0; i <= month; i++){
+            balance += this.getBalanceInMonth(i);
         }
-        return bankBalance;
+        return balance;
+    }
+
+    getBalanceInMonth(month : number) : number {
+        let balance = 0;
+        let positivePaymentsInMonth = this.getPaymentsInMonthByType(month, PaymentType.INCOME);
+        for(let payment of positivePaymentsInMonth){
+            balance += payment.getAmount();
+        }
+        let negativePaymentsInMonth = this.getPaymentsInMonthByType(month, PaymentType.OUTCOME);
+        for(let payment of negativePaymentsInMonth){
+            balance -= payment.getAmount();
+        }
+        return balance;
     }
 
     getPaymentsInMonthByType(month : number, type : PaymentType) : Payment[] {
         let paymentsInMonth : Payment[] = [];
         for(let payment of this.payments){
-            if(payment.getPayMonthsUntilMonth(month).includes(month) && payment.getType() === type){
+            if(payment.getPaymentMonthsUntilMonth(month).includes(month) && payment.getType() === type){
                 paymentsInMonth.push(payment);
             }   
         }

@@ -73,7 +73,7 @@ export default class Payment implements PaymentInterface {
         return payMonths;
     }
 
-    getPayMonthsUntilMonth(month : number) {
+    getPaymentMonthsUntilMonth(month : number) {
         let payMonths = this.getPayMonths();
         let payMonthsUntilMonth = payMonths.filter((item) => {
             return item <= month;

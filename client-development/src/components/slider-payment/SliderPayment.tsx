@@ -70,6 +70,9 @@ export default function SliderPayment() {
         return "" + month;
     }
 
+    let bankBalance = payments.getBalanceUntilMonth(selectedMonth);
+    let monthlyBalance = payments.getBalanceInMonth(selectedMonth);
+
     return (
         <React.Fragment>
             <div className="subheader">Monthly Overview</div>
@@ -89,7 +92,10 @@ export default function SliderPayment() {
                     </div>
                     <div className="currency">
                         <div className="currency-header">Bank Balance :</div>
-                        <div>{payments.getBankBalanceUntilMonth(selectedMonth)} Euro</div>
+                        <div className={bankBalance >= 0 ? "money-transfer-plus" : "money-transfer-minus"}>{bankBalance} Euro</div>
+
+                        <div className="currency-header" style={{marginTop:"20px"}}>Monthly balance :</div>
+                        <div className={monthlyBalance >= 0 ? "money-transfer-plus" : "money-transfer-minus"}>{monthlyBalance} Euro</div>
 
                         <div className="currency-header money-transfers-header">Money transfers :</div>
                         {
