@@ -10,8 +10,8 @@ services:
             - 8123:8123
     mongo:
         restart: always
-        container_name: light-finance-overview-mongodb
-        image: mongo
+        container_name: light-finance-overview-mongodb #this image is necessary to make it runnable on raspi
+        image: andresvidal/rpi3-mongodb3
         ports:
             - 27017:27017
         volumes:
