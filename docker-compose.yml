@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+    node:
+        container_name: light-finance-overview-node
+        restart: always
+        depends_on:
+            - mongo
+        build: .
+        ports:
+            - 8123:8123
+    mongo:
+        restart: always
+        container_name: light-finance-overview-mongodb
+        image: mongo
+        ports:
+            - 27017:27017
+        volumes:
+            - ./mongodb:/data/db
