@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(express.static(__dirname + "/public/app"));
+app.use(express.static(__dirname + "/public/build"));
 app.use(cookieParser());
 app.use("/", router);
 
