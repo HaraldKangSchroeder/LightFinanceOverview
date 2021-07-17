@@ -1,0 +1,2 @@
+After stopping the container which runs mongodb, you might need to remove manually the mongod.lock file within the volume.
+Else, restarting the container might end up with an error
