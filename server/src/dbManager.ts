@@ -8,7 +8,8 @@ import { Collection, MongoClient, Double } from "mongodb";
 import {schemaLightFinanceOverview, schemaSession} from "./dbSchema";
 import bcrypt from "bcrypt";
 
-const URI = "mongodb://127.0.0.1:27017";
+// const URL = "mongodb://127.0.0.1:27017";
+const URL = "mongodb://mongo:27017";
 const DATABASE = "lightFinanceOverviewDb";
 const COLLECTION_LIGHT_FINANCE_OVERVIEW = "lightFinanceOverview";
 const COLLECTION_SESSION = "session";
@@ -16,7 +17,7 @@ const COLLECTION_SESSION = "session";
 init();
 
 async function init() {
-    var client = new MongoClient(URI, {
+    var client = new MongoClient(URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
@@ -47,7 +48,7 @@ async function init() {
 
 export async function run(collection : string, callback?: Function) : Promise<boolean>{
     // client variable needs to be reinstantiated again - src : https://stackoverflow.com/questions/59942238/mongoerror-topology-is-closed-please-connect-despite-established-database-conn
-    var client = new MongoClient(URI, {
+    var client = new MongoClient(URL, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
