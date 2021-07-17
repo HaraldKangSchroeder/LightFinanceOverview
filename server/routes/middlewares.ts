@@ -20,7 +20,7 @@ export const handleAuth = async (req : express.Request, res : express.Response) 
 }
 
 export const handleGetApp = (req : express.Request, res : express.Response) => {
-    res.sendFile("/public/app/app.html", { root: __dirname + "/.." });
+    res.sendFile("/public/build/index.html", { root: __dirname + "/.." });
 }
 
 export const handleLogin = async (req : express.Request, res : express.Response) => {
