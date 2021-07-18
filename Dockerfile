@@ -6,6 +6,8 @@ WORKDIR /usr/src/app
 
 COPY ./server .
 
+RUN npm install -g ts-node
+RUN npm install -g typescript
 RUN npm install
 
 RUN mkdir public
