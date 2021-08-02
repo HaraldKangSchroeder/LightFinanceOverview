@@ -2,7 +2,7 @@ import express from "express";
 import { createSessionEntry, createUserEntry, deleteFinanceEntry, deleteSessionEntry, getFinanceEntries, getSessionEntry, getUserEntry, insertFinanceEntry, replaceFinanceEntry } from "../src/dbManager";
 
 export const verifyCookie = async (req : express.Request, res : express.Response, next : express.NextFunction) => {
-    let sessionId : string = req.cookies.sessionId;
+    let sessionId : string = req.cookies?.sessionId;
     if(!sessionId) return res.sendStatus(403);
     let sessionEntry = await getSessionEntry(sessionId);
     if(!sessionEntry) return res.sendStatus(403);
