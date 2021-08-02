@@ -12,6 +12,15 @@
     cursor: pointer
 }
 
+.topbar-delete-user-button {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.topbar-delete-user-button:hover {
+    cursor: pointer;
+}
+
 .topbar-username {
     margin-right: 10px;
     color: rgb(80,80,80);
