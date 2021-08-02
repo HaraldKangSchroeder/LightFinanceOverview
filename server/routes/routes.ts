@@ -1,5 +1,5 @@
 import express from "express";
-import {checkCreatePaymentRequest, checkDeletePaymentRequest, checkUpdatePaymentRequest, handleAuth, handleCreatePayment, handleCreateUser, handleDeletePayment, handleGetApp, handleGetPayments, handleLogin, handleLogout, handleUpdatePayment, verifyCookie} from "./middlewares";
+import {checkCreatePaymentRequest, checkDeletePaymentRequest, checkUpdatePaymentRequest, handleAuth, handleCreatePayment, handleCreateUser, handleDeletePayment, handleDeleteUser, handleGetApp, handleGetPayments, handleLogin, handleLogout, handleUpdatePayment, verifyCookie} from "./middlewares";
 
 export const router = express.Router();
 
@@ -24,6 +24,7 @@ router.post("/update", handleUpdatePayment)
 router.post("/delete", checkDeletePaymentRequest);
 router.post("/delete", handleDeletePayment);
 
+router.get("/deleteUser", handleDeleteUser);
 router.get("/logout", handleLogout);
 
 

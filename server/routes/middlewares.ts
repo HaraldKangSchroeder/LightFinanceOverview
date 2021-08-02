@@ -1,66 +1,75 @@
 import express from "express";
-import { createSessionEntry, createUserEntry, deleteFinanceEntry, deleteSessionEntry, getFinanceEntries, getSessionEntry, getUserEntry, insertFinanceEntry, replaceFinanceEntry } from "../src/dbManager";
+import { createSessionEntry, createUserEntry, deleteFinanceEntry, deleteSessionEntriesByUsername, deleteSessionEntry, deleteUserEntry, getFinanceEntries, getSessionEntry, getUserEntry, insertFinanceEntry, replaceFinanceEntry } from "../src/dbManager";
 
-export const verifyCookie = async (req : express.Request, res : express.Response, next : express.NextFunction) => {
-    let sessionId : string = req.cookies?.sessionId;
-    if(!sessionId) return res.sendStatus(403);
+export const verifyCookie = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    let sessionId: string = req.cookies?.sessionId;
+    if (!sessionId) return res.sendStatus(403);
     let sessionEntry = await getSessionEntry(sessionId);
-    if(!sessionEntry) return res.sendStatus(403);
+    if (!sessionEntry) return res.sendStatus(403);
     return next();
 }
 
-const getUsernameBySessionId = async (sessionId : string) : Promise<string> => {
-    let {username} = await getSessionEntry(sessionId);
+const getUsernameBySessionId = async (sessionId: string): Promise<string> => {
+    let { username } = await getSessionEntry(sessionId);
     return username;
 }
 
-export const handleAuth = async (req : express.Request, res : express.Response) => {
+export const handleAuth = async (req: express.Request, res: express.Response) => {
     let username = await getUsernameBySessionId(req.cookies.sessionId);
-    res.send({username : username});
+    res.send({ username: username });
 }
 
-export const handleGetApp = (req : express.Request, res : express.Response) => {
+export const handleGetApp = (req: express.Request, res: express.Response) => {
     res.sendFile("/public/build/index.html", { root: __dirname + "/.." });
 }
 
-export const handleLogin = async (req : express.Request, res : express.Response) => {
+export const handleLogin = async (req: express.Request, res: express.Response) => {
     let username = req.body.username;
     let password = req.body.password;
     let userEntry = await getUserEntry(username, password);
-    if (userEntry) {
-        let sessionId = Math.random().toString();
-        await createSessionEntry(username, sessionId);
-        res.cookie("sessionId", sessionId);
-        return res.sendStatus(200);
-    }
-    res.sendStatus(401);
+    if (!userEntry) return res.sendStatus(401);
+
+    let sessionId = Math.random().toString();
+    await createSessionEntry(username, sessionId);
+    res.cookie("sessionId", sessionId);
+    return res.sendStatus(200);
 }
 
-export const handleCreateUser = async (req : express.Request, res : express.Response) => {
+export const handleCreateUser = async (req: express.Request, res: express.Response) => {
     let username = req.body.username;
     let password = req.body.password;
-    let worked = await createUserEntry(username, password);
-    if (worked) {
-        let sessionId = Math.random().toString();
-        await createSessionEntry(username, sessionId);
-        res.cookie("sessionId", sessionId);
-        return res.sendStatus(200);
-    }
-    res.sendStatus(400);
+    let isUserCreated = await createUserEntry(username, password);
+    if (!isUserCreated) return res.sendStatus(500);
+
+    let sessionId = Math.random().toString();
+    await createSessionEntry(username, sessionId);
+    res.cookie("sessionId", sessionId);
+    return res.sendStatus(200);
 }
 
-export const handleGetPayments = async (req : express.Request, res : express.Response) => {
+export const handleDeleteUser = async (req: express.Request, res: express.Response) => {
+    let username = await getUsernameBySessionId(req.cookies.sessionId);
+
+    let isUserDeleted = await deleteUserEntry(username);
+    if (!isUserDeleted!) return res.sendStatus(500);
+
+    let areSessionsDeleted = await deleteSessionEntriesByUsername(username);
+    if (!areSessionsDeleted) return res.sendStatus(500);
+    return res.sendStatus(200);
+}
+
+export const handleGetPayments = async (req: express.Request, res: express.Response) => {
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     sendFinanceEntries(username, res);
 }
 
-export const handleCreatePayment = async (req : express.Request, res : express.Response) => {
+export const handleCreatePayment = async (req: express.Request, res: express.Response) => {
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     await insertFinanceEntry(username, req.body);
     sendFinanceEntries(username, res);
 }
 
-export const handleUpdatePayment = async (req : express.Request, res : express.Response) => {
+export const handleUpdatePayment = async (req: express.Request, res: express.Response) => {
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     await replaceFinanceEntry(
         username,
@@ -70,13 +79,13 @@ export const handleUpdatePayment = async (req : express.Request, res : express.R
     sendFinanceEntries(username, res);
 }
 
-export const handleDeletePayment = async (req : express.Request, res : express.Response) => {
+export const handleDeletePayment = async (req: express.Request, res: express.Response) => {
     let username = await getUsernameBySessionId(req.cookies.sessionId);
     await deleteFinanceEntry(username, req.body.name);
     sendFinanceEntries(username, res);
 }
 
-export const handleLogout = async (req : express.Request, res : express.Response) => {
+export const handleLogout = async (req: express.Request, res: express.Response) => {
     await deleteSessionEntry(req.cookies.sessionId);
     res.sendStatus(200);
 }
@@ -108,7 +117,7 @@ export const checkUpdatePaymentRequest = (req: express.Request, res: express.Res
     checkCreatePaymentRequest(req, res, next);
 }
 
-const sendFinanceEntries = async (username : string, res : express.Response) => {
+const sendFinanceEntries = async (username: string, res: express.Response) => {
     await getFinanceEntries(username, (financeEntries: any) => {
         res.send(financeEntries);
     });

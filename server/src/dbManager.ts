@@ -85,6 +85,14 @@ export async function deleteSessionEntry(sessionId : string){
     });
 }
 
+export async function deleteSessionEntriesByUsername(username : string){
+    return await run(COLLECTION_SESSION,async (session: Collection<any>) => {
+        await session.deleteMany(
+            {"username" : username}
+        );
+    });
+}
+
 export async function getSessionEntry(sessionId : string) : Promise<{username : string, sessionId : string}> {
     let data : any = null;
     await run(COLLECTION_SESSION,async (session : Collection<any>) => {
@@ -99,6 +107,12 @@ export async function createUserEntry(username : string, password : string){
     let hashedPassword = await bcrypt.hash(password, 10);
     return await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview : Collection<any>) => {
         await lightFinanceOverview.insertOne({username : username, password : hashedPassword, data : []});
+    });
+}
+
+export async function deleteUserEntry(username : string){
+    return await run(COLLECTION_LIGHT_FINANCE_OVERVIEW,async (lightFinanceOverview : Collection<any>) => {
+        await lightFinanceOverview.deleteMany({username : username});
     });
 }
 
