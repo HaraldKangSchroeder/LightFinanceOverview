@@ -20,7 +20,7 @@ export default function PaymentData(props: Props) {
                 <div className="payment-data-element-descriptor">Rythm</div> {props.payment.getRythm()} monthly
             </div>
             <div className="payment-data-element">
-                <div className="payment-data-element-descriptor">Days</div>
+                <div className="payment-data-element-descriptor">Months</div>
                 <div className="date-view-container">
                     {props.payment.getPayMonths().map(month =>
                         <DateView month={month} />
