@@ -1,7 +1,7 @@
 # LFO - Light Finance Overview
 This is a private project of mine and is used for a light overview of financial incomes and outcomes.
 
-VIDEO
+https://user-images.githubusercontent.com/81776044/137019366-c0cfb7ef-4d91-41f7-a824-1401481aa91a.mp4
 
 ## Setup
 
